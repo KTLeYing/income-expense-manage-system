@@ -1,0 +1,99 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 105293
+    url: jdbc:mysql://localhost:/income_expense_manage?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    #配置Druid
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      # 否则报错：Loading class `com.mysql.jdbc.Driver'. This is deprecated.
+      #配置初始化大小/最小/最大[仅用于测试，生成环境需要修改哦]
+      initial-size: 5
+      #最小空闲数
+      min-idle: 5
+      #最大连接数
+      max-active: 20
+      #获取连接等待超时时间
+      max-wait: 60000
+      #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位毫秒
+      time-between-eviction-runs-millis: 60000
+      #一个连接在池中最小生存的时间
+      min-evictable-idle-time-millis: 300000
+      #指定获取连接时连接校验的sql查询语句
+      validation-query: SELECT 'x'
+      #验证连接的有效性
+      test-while-idle: true
+      #获取连接时候验证，会影响性能（不建议true）
+      test-on-borrow: false
+      #打开PSCache，并指定每个连接上PSCache的大小。oracle设为true，mysql设为false。分库分表较多推荐设置为false
+      pool-prepared-statements: false
+      max-pool-prepared-statement-per-connection-size: 20
+      # 配置监控统计拦截的 Filter，去掉后监控界面 SQL 无法统计，wall 用于防火墙
+      filters: stat,wall,log4j
+      # 通过 connection-properties 属性打开 mergeSql 功能；慢 SQL 记录
+      connection-properties: druid.stat.mergeSql\=true;druid.stat.slowSqlMillis\=5000
+      # 配置 DruidStatFilter
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: .js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*
+      # 配置 DruidStatViewServlet
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        # IP 白名单，没有配置或者为空，则允许所有访问
+        allow:
+        # IP 黑名单，若白名单也存在，则优先使用
+        deny:
+        # 禁用 HTML 中 Reset All 按钮
+        reset-enable: false
+        # 登录用户名/密码
+        login-username: root
+        login-password: 0.00.0
+
+  #Redis服务器地址
+  redis:
+    host: 1.1.1.1
+    #Redis服务器连接端口
+    port: 6379
+    #密码
+    password: aA1138312802aA0.00.0
+    #Redis数据库索引（默认为0）
+    database: 0
+    #连接超时时间（毫秒）
+    timeout: 5000
+    jedis:
+      pool:
+        #连接池最大连接数（使用负值表示没有限制）
+        max-active: 50
+        #连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: 3000
+        #连接池中的最大空闲连接
+        max-idle: 20
+        #连接池中的最小空闲连接
+        min-idle: 2
+
+  # rabbitMQ配置
+  rabbitmq:
+    host: 1.1.1.1
+    port: 5672
+    username: admin
+    password: admin
+    #虚拟host 可以不设置,使用server默认host
+    virtual-host: /incomeExpenseMQ
+    # 开启发送确认
+    publisher-confirm-type: correlated
+    # 开启发送失败退回
+    publisher-returns: true
+    #  消息发送到交换机确认机制,是否确认回
+    publisher-confirms: true
+    listener:
+      # 简单模式
+      simple:
+        acknowledge-mode: manual  # 开启ACK自动确认
+        concurrency: 3 # 消费者最小数量
+        max-concurrency: 10 # 消费者最大数量
+      # 交换模式
+      direct:
+        acknowledge-mode: manual  # 开启ACK自动确认
