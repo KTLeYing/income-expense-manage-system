@@ -7,11 +7,13 @@ import com.mzl.incomeexpensemanagesystem.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.ResultSet;
 
 /**
  * @ClassName :   UserController
@@ -45,6 +47,18 @@ public class UserController {
     @ApiOperation(value = "用户退出登录")
     public RetResult userLogout(HttpServletRequest request){
         return userService.userLogout(request);
+    }
+
+    @PostMapping("/selectCurrentUser")
+    @ApiOperation(value = "获取当前用户信息")
+    public RetResult selectCurrentUser(HttpServletRequest request){
+        return userService.selectCurrentUser(request);
+    }
+
+    @PostMapping("/updatePassword")
+    @ApiOperation(value = "修改用户密码")
+    public RetResult updatePassword(String oldPassword, String newPassword, String newPassword1){
+        return userService.updatePassword(oldPassword, newPassword, newPassword1);
     }
 
 }

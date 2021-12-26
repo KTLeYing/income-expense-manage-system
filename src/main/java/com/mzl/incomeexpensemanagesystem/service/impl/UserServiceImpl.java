@@ -25,6 +25,7 @@ import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static com.mzl.incomeexpensemanagesystem.utils.JwtTokenUtil.EXPIRATION_REMEMBER;
@@ -78,12 +79,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     /**
+     * 获取当前用户所有具体信息（辅助用）
+     */
+    public User getUser(){
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        Integer userId  = Integer.valueOf(getUserId(request));
+        User user = userMapper.selectById(userId);
+        return user;
+    }
+
+    /**
      * 用户注册
      * @param user
      * @return
      */
     @Override
     public RetResult register(User user) {
+        //查询用户名是否存在
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", user.getUsername());
+        User userExist = userMapper.selectOne(queryWrapper);
+        if (userExist != null){
+            //用户名已存在
+            return RetResult.fail(RetCodeEnum.USERNAME_EXIST);
+        }
         //加密用户密码
         user.setPassword(MD5Util.getSaltMD5(user.getPassword()));
         try {
@@ -168,6 +187,44 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String userId = userService.getUserId(request);
         redisTemplate.delete(TOKEN_KEY_PREFIX + userId);
         return RetResult.success(RetCodeEnum.LOGOUT_SUCCESS);
+    }
+
+    /**
+     * 获取当前用户信息
+     * @param request
+     * @return
+     */
+    @Override
+    public RetResult selectCurrentUser(HttpServletRequest request) {
+        User user = getUser();
+        user.setPassword("");
+        return RetResult.success(user);
+    }
+
+    /**
+     * 修改用户密码
+     * @param oldPassword
+     * @param newPassword
+     * @param newPassword1
+     * @return
+     */
+    @Override
+    public RetResult updatePassword(String oldPassword, String newPassword, String newPassword1) {
+        //判断两次新密码是否相同
+        if (!Objects.equals(newPassword, newPassword1)){
+            return RetResult.fail(RetCodeEnum.TWO_NEW_PASSWORD_NOT_SAME);
+        }
+        //判断旧密码正确不
+        if (!MD5Util.getSaltverifyMD5(oldPassword, getUser().getPassword())){
+            return RetResult.fail(RetCodeEnum.OLD_PASSWORD_ERROR);
+        }
+        //加密密码
+        String password1 = MD5Util.getSaltMD5(newPassword);
+        //更新密码
+        User user = getUser();
+        user.setPassword(password1);
+        userMapper.updateById(user);
+        return RetResult.success();
     }
 
 }

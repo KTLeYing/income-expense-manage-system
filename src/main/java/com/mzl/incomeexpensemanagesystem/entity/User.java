@@ -42,7 +42,7 @@ public class User implements Serializable {
       private String password;
 
       @ApiModelProperty(value = "性别，1:男 2:女")
-      private Boolean sex;
+      private Integer sex;
 
       @ApiModelProperty(value = "邮箱")
       private String email;

@@ -3,39 +3,39 @@ server:
   servlet:
     context-path: /incomeExpense
 
-#mybatis-plusÅäÖÃ
+#mybatis-plusé…ç½®
 mybatis-plus:
-  mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.mzl.incomeexpensemanagesystem.entity
-  type-enums-package: com.mzl.incomeexpensemanagesystem.enums
-  # MyBatis Ô­ÉúÖ§³ÖµÄÅäÖÃ
+  mapper-locations: classpath:mapper/*ã€‚xml
+  ç±»å‹-aliases-package: com.mzl.incomeexpensemanagesystem.entity
+  ç±»å‹-enums-package: com.mzl.incomeexpensemanagesystem.enums
+  # MyBatis åŸç”Ÿæ”¯æŒçš„é…ç½®
   configuration:
-    # ÊÇ·ñ¿ªÆô×Ô¶¯ÍÕ·åÃüÃû¹æÔò£¨camel case£©Ó³Éä
+    # æ˜¯å¦å¼€å¯è‡ªåŠ¨é©¼å³°å‘½åè§„åˆ™ï¼ˆcamel caseï¼‰æ˜ å°„
     mapUnderscoreToCamelCase: true
-    # ÔÚ¿ØÖÆÌ¨´òÓ¡SQLÃüÁî²¢´òÓ¡Ö´ĞĞ½á¹û
-    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    # ÔÚ¿ØÖÆÌ¨´òÓ¡SQLÃüÁî²»´òÓ¡½á¹û
+    # åœ¨æ§åˆ¶å°æ‰“å°SQLå‘½ä»¤å¹¶æ‰“å°æ‰§è¡Œç»“æœ
+    # log-impl: orgã€‚apacheã€‚ibatisã€‚loggingã€‚stdoutã€‚StdOutImpl
+    # åœ¨æ§åˆ¶å°æ‰“å°SQLå‘½ä»¤ä¸æ‰“å°ç»“æœ
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
-  # È«¾Ö²ßÂÔÅäÖÃ
+  # å…¨å±€ç­–ç•¥é…ç½®
   global-config:
     db-config:
-      logic-delete-field: deleted  # È«¾ÖÂß¼­É¾³ıµÄÊµÌå×Ö¶ÎÃû(since 3.3.0,ÅäÖÃºó¿ÉÒÔºöÂÔ²»ÅäÖÃ²½Öè2)
-      logic-delete-value: 0 # Âß¼­ÒÑÉ¾³ıÖµ(Ä¬ÈÏÎª 1)
-      logic-not-delete-value: 1 # Âß¼­Î´É¾³ıÖµ(Ä¬ÈÏÎª 0)
-      #²éÑ¯Ê±²»ÓÃÅĞ¿Õ
+      logic-delete-field: deleted  # å…¨å±€é€»è¾‘åˆ é™¤çš„å®ä½“å­—æ®µå(since 3.3.0,é…ç½®åå¯ä»¥å¿½ç•¥ä¸é…ç½®æ­¥éª¤2)
+      logic-delete-value: 0 # é€»è¾‘å·²åˆ é™¤å€¼(é»˜è®¤ä¸º 1)
+      logic-not-delete-value: 1 # é€»è¾‘æœªåˆ é™¤å€¼(é»˜è®¤ä¸º 0)
+      #æŸ¥è¯¢æ—¶ä¸ç”¨åˆ¤ç©º
       select-strategy: not_empty
 
-#springÏà¹ØÅäÖÃ
+#springç›¸å…³é…ç½®
 spring:
-  # ¼¤»î»·¾³
+  # æ¿€æ´»ç¯å¢ƒ
   profiles:
     active: dev
-#    active: pro
+  #    å·²æ¿€æ´»: pro
   servlet:
     multipart:
-      #µ¥¸öÎÄ¼şÉÏ´«´óĞ¡
+      #å•ä¸ªæ–‡ä»¶ä¸Šä¼ å¤§å°
       max-file-size: 10MB
-      #×ÜÊı¾İÉÏ´«´óĞ¡
+      #æ€»æ•°æ®ä¸Šä¼ å¤§å°
       max-request-size: 100MB
 
   #thymeleaaf
@@ -45,13 +45,11 @@ spring:
     suffix: .html
     cache: false
 
-  #¿ªÆôÈÈ²¿Êğ
+  #å¼€å¯çƒ­éƒ¨ç½²
   devtools:
     restart:
       enabled: true
 
-  # ÔÊĞíÑ­»·ÒÀÀµ
+  # å…è®¸å¾ªç¯ä¾èµ–
   main:
     allow-circular-references: true
-
-

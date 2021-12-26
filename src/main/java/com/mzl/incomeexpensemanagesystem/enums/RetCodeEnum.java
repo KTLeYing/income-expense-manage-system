@@ -31,7 +31,10 @@ public enum RetCodeEnum {
     REQUEST_INVALID(212, "请求无效"),
     TOKEN_ERROR(213, "token不能为空或格式不正确"),
     LOGOUT_SUCCESS(214, "退出登录成功"),
-    LOGOUT_FAIL(215, "退出登录失败")
+    LOGOUT_FAIL(215, "退出登录失败"),
+    USERNAME_EXIST(216, "用户名已存在"),
+    TWO_NEW_PASSWORD_NOT_SAME(217, "两次新密码不相同"),
+    OLD_PASSWORD_ERROR(218, "旧密码不正确")
     ;
 
     private Integer code;

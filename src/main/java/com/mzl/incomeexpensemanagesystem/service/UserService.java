@@ -45,4 +45,20 @@ public interface UserService extends IService<User> {
      */
     RetResult userLogout(HttpServletRequest request);
 
+    /**
+     * 获取当前用户信息
+     * @param request
+     * @return
+     */
+    RetResult selectCurrentUser(HttpServletRequest request);
+
+    /**
+     * 修改用户密码
+     * @param oldPassword
+     * @param newPassword
+     * @param newPassword1
+     * @return
+     */
+    RetResult updatePassword(String oldPassword, String newPassword, String newPassword1);
+
 }
