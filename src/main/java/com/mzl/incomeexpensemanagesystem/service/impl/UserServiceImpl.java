@@ -9,8 +9,10 @@ import com.mzl.incomeexpensemanagesystem.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mzl.incomeexpensemanagesystem.utils.JwtTokenUtil;
 import com.mzl.incomeexpensemanagesystem.utils.MD5Util;
+import com.mzl.incomeexpensemanagesystem.vo.UserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -58,9 +60,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private static final String TOKEN_KEY_PREFIX = "incomeExpense:user:token:";
 
     /**
-     * 用户登录验证码的key后缀
+     * 用户登录的图文验证码的key前缀
      */
-    private static final String VERIFY_CODE_KEY_SUBFIX = "verifyCode";
+    private static final String GRAPHIC_CODE_KEY_PREFIX = "incomeExpense:graphicCode:";
+
+    /**
+     * 用户找回密码的短信验证码的key前缀
+     */
+    private static final String MESSAGE_CODE_KEY_PREFIX = "incomeExpense:messageCode:";
+
+    /**
+     * 用户注册的邮箱验证码的key前缀
+     */
+    private static final String EMAIL_CODE_KEY_PREFIX = "incomeExpense:emailCode:";
+
 
     /**
      * 获取当前用户(根据token)
@@ -90,20 +103,46 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     /**
      * 用户注册
-     * @param user
+     * @param userVo
      * @return
      */
     @Override
-    public RetResult register(User user) {
-        //查询用户名是否存在
+    public RetResult register(UserVo userVo) {
+        User user = new User();
+        BeanUtils.copyProperties(userVo, user);
+        //判断邮箱验证码是否正确
+        //获取远程机器ip
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String ip = "";
+        try {
+            //先用本地地址模拟
+            ip = InetAddress.getLocalHost().getHostAddress();
+            //获取远程地址(无代理)
+//            ip = request.getRemoteAddr();
+            //获取远程地址(Nginx代理), 获取nginx转发的实际ip，前端要在请求头配置X-Real-IP的请求头字段（从请求头中获取，如果是在Nginx设置的话要配置一些东西）
+//            ip = request.getHeader("X-Real-IP");
+            log.info("ip: " + ip);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        //从redis获取邮箱验证码
+        String realCode = (String) redisTemplate.opsForValue().get(EMAIL_CODE_KEY_PREFIX + ip);
+        if (StringUtils.isEmpty(realCode) || !realCode.equalsIgnoreCase(userVo.getEmailCode())){
+            //邮箱验证码错误
+            return RetResult.fail(RetCodeEnum.EMAIL_CODE_ERROR);
+        }
+        //查询用户名或手机号或邮箱已存在(用户名、手机号、邮箱只能唯一)
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", user.getUsername());
+        queryWrapper.eq("username", user.getUsername()).or().eq("email", user.getEmail()).or().eq("phone", user.getPhone());
         User userExist = userMapper.selectOne(queryWrapper);
         if (userExist != null){
-            //用户名已存在
-            return RetResult.fail(RetCodeEnum.USERNAME_EXIST);
+            //用户名或手机号或邮箱已存在
+            return RetResult.fail(RetCodeEnum.USERNAME_EMAIL_PHONE_EXIST);
         }
         //加密用户密码
+        Date now = new Date();
+        user.setCreateTime(now);
+        user.setLastLoginTime(now);
         user.setPassword(MD5Util.getSaltMD5(user.getPassword()));
         try {
             userMapper.insert(user);
@@ -140,14 +179,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-        String realCode = (String) redisTemplate.opsForValue().get(ip + ":" + VERIFY_CODE_KEY_SUBFIX);
-        if (StringUtils.isEmpty(realCode)){
-            //验证码无效
-            return RetResult.fail(RetCodeEnum.VERIFY_CODE_INVALID);
-        }
-        if (!verifyCode.equalsIgnoreCase(realCode)){
-            //验证码错误
-            return RetResult.fail(RetCodeEnum.VERIFY_CODE_ERROR);
+        String realCode = (String) redisTemplate.opsForValue().get(GRAPHIC_CODE_KEY_PREFIX + ip);
+        if (StringUtils.isEmpty(realCode) || !verifyCode.equalsIgnoreCase(realCode)){
+            //图文验证码无效或错误
+            return RetResult.fail(RetCodeEnum.GRAPHIC_CODE_ERROR);
         }
         //验证用户名
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
@@ -171,7 +206,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         response.setHeader(JwtTokenUtil.TOKEN_HEADER, JwtTokenUtil.TOKEN_PREFIX + token);
         //给修改最近一次登录时间
         Date now = new Date();
-        user.setCreateTime(now);
+        user.setLastLoginTime(now);
         userMapper.updateById(user);
         return RetResult.success(RetCodeEnum.LOGIN_SUCCESS);
     }
@@ -223,6 +258,66 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //更新密码
         User user = getUser();
         user.setPassword(password1);
+        userMapper.updateById(user);
+        return RetResult.success();
+    }
+
+    /**
+     * 找回密码(通过短信验证码)
+     * @param newPassword
+     * @param newPassword1
+     * @param messageCode
+     * @return
+     */
+    @Override
+    public RetResult findBackPassword(String newPassword, String newPassword1, String phone, String messageCode) {
+        //判断两次新密码是否相同
+        if (!Objects.equals(newPassword, newPassword1)){
+            return RetResult.fail(RetCodeEnum.TWO_NEW_PASSWORD_NOT_SAME);
+        }
+        //判断短信验证码
+        //获取远程机器ip
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String ip = "";
+        try {
+            //先用本地地址模拟
+            ip = InetAddress.getLocalHost().getHostAddress();
+            //获取远程地址(无代理)
+//            ip = request.getRemoteAddr();
+            //获取远程地址(Nginx代理), 获取nginx转发的实际ip，前端要在请求头配置X-Real-IP的请求头字段（从请求头中获取，如果是在Nginx设置的话要配置一些东西）
+//            ip = request.getHeader("X-Real-IP");
+            log.info("ip: " + ip);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        //从redis中获取短信验证码
+        Integer realMessageCode = (Integer) redisTemplate.opsForValue().get(MESSAGE_CODE_KEY_PREFIX + ip);
+        if (Objects.isNull(realMessageCode) || !String.valueOf(realMessageCode).equalsIgnoreCase(messageCode)){
+            //短信验证码错误
+            return RetResult.fail(RetCodeEnum.MESSAGE_CODE_ERROR);
+        }
+        //加密密码
+        String password1 = MD5Util.getSaltMD5(newPassword);
+        //更新密码
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("phone", phone);
+        User user = userMapper.selectOne(queryWrapper);
+        user.setPassword(password1);
+        userMapper.updateById(user);
+        return RetResult.success();
+    }
+
+    /**
+     * 修改用户信息
+     * @param user
+     * @return
+     */
+    @Override
+    public RetResult updateUser(User user) {
+        User user1 = userMapper.selectById(user.getUserId());
+        user.setPassword(user1.getPassword());
+        user.setCreateTime(user1.getCreateTime());
+        user.setLastLoginTime(user1.getLastLoginTime());
         userMapper.updateById(user);
         return RetResult.success();
     }

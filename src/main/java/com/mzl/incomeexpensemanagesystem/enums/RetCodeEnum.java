@@ -24,7 +24,7 @@ public enum RetCodeEnum {
     LOGIN_FAIL(204, "登录失败"),
     USERNAME_ERROR(205, "用户名错误"),
     PASSWORD_ERROR(206, "密码错误"),
-    VERIFY_CODE_ERROR(207, "验证码错误"),
+    GRAPHIC_CODE_ERROR(207, "登录验证码错误"),
     VERIFY_CODE_INVALID(208, "验证码失效"),
     REFUSE_REQUEST(210, "请求过于频繁~"),
     TOKEN_EXPIRED(211, "token过期"),
@@ -32,9 +32,16 @@ public enum RetCodeEnum {
     TOKEN_ERROR(213, "token不能为空或格式不正确"),
     LOGOUT_SUCCESS(214, "退出登录成功"),
     LOGOUT_FAIL(215, "退出登录失败"),
-    USERNAME_EXIST(216, "用户名已存在"),
+    USERNAME_EMAIL_PHONE_EXIST(216, "用户名或手机号或邮箱已存在"),
     TWO_NEW_PASSWORD_NOT_SAME(217, "两次新密码不相同"),
-    OLD_PASSWORD_ERROR(218, "旧密码不正确")
+    OLD_PASSWORD_ERROR(218, "旧密码不正确"),
+    MESSAGE_CODE_ERROR(219, "短信验证码不正确"),
+    EMAIL_CODE_ERROR(220, "邮箱验证码不正确"),
+
+    //验证码枚举
+    SEND_EMAIL_FAIL(221, "邮件发送失败"),
+    SEND_MESSAGE_FAIL(221, "短信发送失败")
+
     ;
 
     private Integer code;

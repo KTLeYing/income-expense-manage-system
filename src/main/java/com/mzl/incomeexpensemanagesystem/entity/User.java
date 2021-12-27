@@ -11,6 +11,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -24,8 +25,8 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @since 2021-12-22
  */
 @Data
-  @EqualsAndHashCode(callSuper = false)
-    @TableName("user")
+@EqualsAndHashCode(callSuper = false)
+@TableName("user")
 @ApiModel(value="User对象", description="用户表")
 public class User implements Serializable {
 
@@ -57,12 +58,12 @@ public class User implements Serializable {
       private Boolean deleted;
 
       @ApiModelProperty(value = "注册时间")
-      @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+      @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
       @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
       private Date createTime;
 
       @ApiModelProperty(value = "最近一次登录时间")
-      @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+      @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
       @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
       private Date lastLoginTime;
 

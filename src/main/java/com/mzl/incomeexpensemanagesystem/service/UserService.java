@@ -3,6 +3,7 @@ package com.mzl.incomeexpensemanagesystem.service;
 import com.mzl.incomeexpensemanagesystem.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mzl.incomeexpensemanagesystem.response.RetResult;
+import com.mzl.incomeexpensemanagesystem.vo.UserVo;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,10 +19,10 @@ public interface UserService extends IService<User> {
 
     /**
      * 用户注册
-     * @param user
+     * @param userVo
      * @return
      */
-    RetResult register(User user);
+    RetResult register(UserVo userVo);
 
     /**
      * 用户登录
@@ -60,5 +61,21 @@ public interface UserService extends IService<User> {
      * @return
      */
     RetResult updatePassword(String oldPassword, String newPassword, String newPassword1);
+
+    /**
+     * 找回密码
+     * @param newPassword
+     * @param newPassword1
+     * @param messageCode
+     * @return
+     */
+    RetResult findBackPassword(String newPassword, String newPassword1, String phone, String messageCode);
+
+    /**
+     * 修改用户信息
+     * @param user
+     * @return
+     */
+    RetResult updateUser(User user);
 
 }

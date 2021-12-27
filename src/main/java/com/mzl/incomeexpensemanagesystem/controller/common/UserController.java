@@ -4,13 +4,11 @@ import com.mzl.incomeexpensemanagesystem.annotation.LoginRateLimit;
 import com.mzl.incomeexpensemanagesystem.entity.User;
 import com.mzl.incomeexpensemanagesystem.response.RetResult;
 import com.mzl.incomeexpensemanagesystem.service.UserService;
+import com.mzl.incomeexpensemanagesystem.vo.UserVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.ResultSet;
@@ -39,8 +37,8 @@ public class UserController {
 
     @PostMapping("/register")
     @ApiOperation(value = "用户注册")
-    public RetResult register(User user){
-        return userService.register(user);
+    public RetResult register(@RequestBody UserVo userVo){
+        return userService.register(userVo);
     }
 
     @PostMapping("/userLogout")
@@ -59,6 +57,18 @@ public class UserController {
     @ApiOperation(value = "修改用户密码")
     public RetResult updatePassword(String oldPassword, String newPassword, String newPassword1){
         return userService.updatePassword(oldPassword, newPassword, newPassword1);
+    }
+
+    @PostMapping("/findBackPassword")
+    @ApiOperation(value = "找回密码")
+    public RetResult findBackPassword(String newPassword, String newPassword1, String phone, String messageCode){
+        return userService.findBackPassword(newPassword, newPassword1, phone, messageCode);
+    }
+
+    @PostMapping("/updateUser")
+    @ApiOperation(value = "修改用户信息")
+    public RetResult updateUser(@RequestBody User user){
+        return userService.updateUser(user);
     }
 
 }
