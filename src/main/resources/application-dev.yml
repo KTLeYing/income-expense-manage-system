@@ -78,10 +78,10 @@ spring:
   rabbitmq:
     host: localhost
     port: 5672
-    username: admin
-    password: admin
+    username: guest
+    password: guest
     #虚拟host 可以不设置,使用server默认host
-    virtual-host: /incomeExpenseMQ
+    virtual-host: /
     # 开启发送确认
     publisher-confirm-type: correlated
     # 开启发送失败退回
@@ -91,9 +91,12 @@ spring:
     listener:
       # 简单模式
       simple:
-        acknowledge-mode: manual  # 开启ACK自动确认
-        concurrency: 3 # 消费者最小数量
-        max-concurrency: 10 # 消费者最大数量
+        acknowledge-mode: auto  # 开启ACK自动确认[NONE 无确认、MANUAL 手动确实、AUTO 自动确认(默认方式)]
+        concurrency: 10 # 消费者最小数量
+        max-concurrency: 100 # 消费者最大数量
+        # 是否支持重试
+        retry:
+          enabled: true
       # 交换模式
-      direct:
-        acknowledge-mode: manual  # 开启ACK自动确认
+#      direct:
+#        acknowledge-mode: MANUAL  # 开启ACK手动确认[手动模式要自己在代码逻辑中去手动确认]

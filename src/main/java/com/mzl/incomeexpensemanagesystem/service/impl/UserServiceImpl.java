@@ -94,6 +94,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 获取当前用户所有具体信息（辅助用）
      */
+    @Override
     public User getUser(){
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         Integer userId  = Integer.valueOf(getUserId(request));

@@ -4,6 +4,8 @@ import com.mzl.incomeexpensemanagesystem.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mzl.incomeexpensemanagesystem.response.RetResult;
 import com.mzl.incomeexpensemanagesystem.vo.UserVo;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -39,6 +41,11 @@ public interface UserService extends IService<User> {
      * @return
      */
     String getUserId(HttpServletRequest request);
+
+    /**
+     * 获取当前用户所有具体信息（辅助用）
+     */
+    User getUser();
 
     /**
      * 用户退出登录

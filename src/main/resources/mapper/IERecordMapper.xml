@@ -7,4 +7,35 @@
         i_e_record_id, user_id, i_c_category_id, num, note, create_time
     </sql>
 
-    </mapper>
+    <!--分页模糊查询当前用户收支记录-->
+    <select id="selectPageRecord" resultType="com.mzl.incomeexpensemanagesystem.vo.IERecordVo">
+        select r.*, c.parent_category, c.son_category from i_e_record r, i_e_category c
+        <where>
+            r.i_e_category_id = c.i_e_category_id and r.user_id = #{ieRecordVo.userId}
+            <if test="ieRecordVo.note != '' and ieRecordVo.note != null">
+                and r.note like '%${ieRecordVo.note}%'
+            </if>
+            <if test="ieRecordVo.parentCategory != '' and ieRecordVo.parentCategory != null">
+                and c.parent_category like '%${ieRecordVo.parentCategory}%'
+            </if>
+            <if test="ieRecordVo.sonCategory != '' and ieRecordVo.sonCategory != null">
+                and c.son_category like '%${ieRecordVo.sonCategory}%'
+            </if>
+            <if test="ieRecordVo.realCreateTime != '' and ieRecordVo.realCreateTime != null">
+                and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y-%m-%d') = #{ieRecordVo.realCreateTime}
+            </if>
+            <if test="ieRecordVo.realCreateTimeTwo != '' and ieRecordVo.realCreateTimeTwo != null">
+                and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y-%m') = #{ieRecordVo.realCreateTimeTwo}
+            </if>
+        </where>
+    </select>
+
+    <!--按年统计每月的收入-->
+    <select id="statisticByYear" resultType="com.mzl.incomeexpensemanagesystem.vo.StatisticVo">
+        select DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%m') as month, sum(r.num) as num from i_e_record r, i_e_category c
+        where c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y') = #{year}
+        and c.parent_category = #{parentCategory} group by DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%m')
+    </select>
+
+
+</mapper>

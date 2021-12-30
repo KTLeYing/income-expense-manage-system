@@ -39,8 +39,11 @@ public enum RetCodeEnum {
     EMAIL_CODE_ERROR(220, "邮箱验证码不正确"),
 
     //验证码枚举
-    SEND_EMAIL_FAIL(221, "邮件发送失败"),
-    SEND_MESSAGE_FAIL(221, "短信发送失败")
+    SEND_EMAIL_FAIL(301, "邮件发送失败"),
+    SEND_MESSAGE_FAIL(302, "短信发送失败"),
+
+    //收支枚举类
+    SON_CATEGORY_EXISTS(401, "子类型已存在")
 
     ;
 

@@ -25,8 +25,8 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @since 2021-12-22
  */
 @Data
-  @EqualsAndHashCode(callSuper = false)
-    @TableName("i_e_record")
+@EqualsAndHashCode(callSuper = false)
+@TableName("i_e_record")
 @ApiModel(value="IERecord对象", description="收支记录表")
 public class IERecord implements Serializable {
 
@@ -40,10 +40,10 @@ public class IERecord implements Serializable {
       private Integer userId;
 
       @ApiModelProperty(value = "收支类型id")
-      private Integer iCCategoryId;
+      private Integer iECategoryId;
 
       @ApiModelProperty(value = "收支数量(钱数)")
-      private Integer num;
+      private Double num;
 
       @ApiModelProperty(value = "收支备注")
       private String note;

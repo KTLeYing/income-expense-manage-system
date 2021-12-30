@@ -2,6 +2,7 @@ package com.mzl.incomeexpensemanagesystem.controller.common;
 
 import com.mzl.incomeexpensemanagesystem.enums.RetCodeEnum;
 import com.mzl.incomeexpensemanagesystem.exception.CustomException;
+import com.mzl.incomeexpensemanagesystem.rabbitmq.Producer;
 import com.mzl.incomeexpensemanagesystem.response.RetResult;
 import com.mzl.incomeexpensemanagesystem.utils.EmailCodeUtil;
 import com.mzl.incomeexpensemanagesystem.utils.SendMessageUtil;
@@ -39,6 +40,9 @@ public class CodeController {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private Producer producer;
 
     /**
      * 用户登录的图文验证码的key前缀
@@ -87,60 +91,63 @@ public class CodeController {
     public void createMessage(String phone) throws IOException {
         //发送短信
         try {
-            SendMessageUtil.sendSMS(phone);
+//            SendMessageUtil.sendSMS(phone);
+            //推送电话号码到消息队列
+            producer.sendPhoneToQueue(phone);
         } catch (Exception e) {
             e.printStackTrace();
             new CustomException(RetCodeEnum.SEND_MESSAGE_FAIL);
         }
 
-        //获取远程机器ip
-        String ip = "";
-        try {
-            //先用本地地址模拟
-            ip = InetAddress.getLocalHost().getHostAddress();
-            //获取远程地址(无代理)
-//            ip = request.getRemoteAddr();
-            //获取远程地址(Nginx代理), 获取nginx转发的实际ip，前端要在请求头配置X-Real-IP的请求头字段（从请求头中获取，如果是在Nginx设置的话要配置一些东西）
-//            ip = request.getHeader("X-Real-IP");
-            log.info("ip: " + ip);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        //存储验证码到redis,tts为3分钟
-        Integer code = SendMessageUtil.getCode();
-        log.info("生成短信验证码：" + code);
-        redisTemplate.opsForValue().set(MESSAGE_CODE_KEY_PREFIX + ip, code, 180, TimeUnit.SECONDS);
+//        //获取远程机器ip
+//        String ip = "";
+//        try {
+//            //先用本地地址模拟
+//            ip = InetAddress.getLocalHost().getHostAddress();
+//            //获取远程地址(无代理)
+////            ip = request.getRemoteAddr();
+//            //获取远程地址(Nginx代理), 获取nginx转发的实际ip，前端要在请求头配置X-Real-IP的请求头字段（从请求头中获取，如果是在Nginx设置的话要配置一些东西）
+////            ip = request.getHeader("X-Real-IP");
+//            log.info("ip: " + ip);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        //存储验证码到redis,tts为3分钟
+//        Integer code = SendMessageUtil.getCode();
+//        log.info("生成短信验证码：" + code);
+//        redisTemplate.opsForValue().set(MESSAGE_CODE_KEY_PREFIX + ip, code, 180, TimeUnit.SECONDS);
     }
 
     @GetMapping("/createEmail")
     @ApiOperation(value = "生成邮箱验证码")
     public void createEmail(String email) throws IOException, MessagingException {
         //发送邮件验证码
-        String code = "";
+//        String code = "";
         try {
-            EmailCodeUtil emailCodeUtil = new EmailCodeUtil();
-            code = emailCodeUtil.sendEmail(email);
+//            EmailCodeUtil emailCodeUtil = new EmailCodeUtil();
+//            code = emailCodeUtil.sendEmail(email);
+            //推送邮件到消息队列
+            producer.sendEmailToQueue(email);
         } catch (Exception e) {
             e.printStackTrace();
             new CustomException(RetCodeEnum.SEND_EMAIL_FAIL);
         }
-
-        //获取远程机器ip
-        String ip = "";
-        try {
-            //先用本地地址模拟
-            ip = InetAddress.getLocalHost().getHostAddress();
-            //获取远程地址(无代理)
-//            ip = request.getRemoteAddr();
-            //获取远程地址(Nginx代理), 获取nginx转发的实际ip，前端要在请求头配置X-Real-IP的请求头字段（从请求头中获取，如果是在Nginx设置的话要配置一些东西）
-//            ip = request.getHeader("X-Real-IP");
-            log.info("ip: " + ip);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        //存储验证码到redis,tts为3分钟
-        log.info("生成邮箱验证码：" + code);
-        redisTemplate.opsForValue().set(EMAIL_CODE_KEY_PREFIX + ip, code, 180, TimeUnit.SECONDS);
+//        //获取远程机器ip
+//        String ip = "";
+//        try {
+//            //先用本地地址模拟
+//            ip = InetAddress.getLocalHost().getHostAddress();
+//            //获取远程地址(无代理)
+////            ip = request.getRemoteAddr();
+//            //获取远程地址(Nginx代理), 获取nginx转发的实际ip，前端要在请求头配置X-Real-IP的请求头字段（从请求头中获取，如果是在Nginx设置的话要配置一些东西）
+////            ip = request.getHeader("X-Real-IP");
+//            log.info("ip: " + ip);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        //存储验证码到redis,tts为3分钟
+//        log.info("生成邮箱验证码：" + code);
+//        redisTemplate.opsForValue().set(EMAIL_CODE_KEY_PREFIX + ip, code, 180, TimeUnit.SECONDS);
     }
 
 }

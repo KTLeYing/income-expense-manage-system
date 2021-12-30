@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 105293
-    url: jdbc:mysql://localhost:/income_expense_manage?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/income_expense_manage?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
     #配置Druid
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
@@ -54,11 +54,11 @@ spring:
 
   #Redis服务器地址
   redis:
-    host: 1.1.1.1
+    host: localhost
     #Redis服务器连接端口
     port: 6379
     #密码
-    password: aA1138312802aA0.00.0
+    password: 105293
     #Redis数据库索引（默认为0）
     database: 0
     #连接超时时间（毫秒）
@@ -76,12 +76,12 @@ spring:
 
   # rabbitMQ配置
   rabbitmq:
-    host: 1.1.1.1
+    host: localhost
     port: 5672
-    username: admin
-    password: admin
+    username: guest
+    password: guest
     #虚拟host 可以不设置,使用server默认host
-    virtual-host: /incomeExpenseMQ
+    virtual-host: /
     # 开启发送确认
     publisher-confirm-type: correlated
     # 开启发送失败退回
@@ -91,9 +91,12 @@ spring:
     listener:
       # 简单模式
       simple:
-        acknowledge-mode: manual  # 开启ACK自动确认
-        concurrency: 3 # 消费者最小数量
-        max-concurrency: 10 # 消费者最大数量
+        acknowledge-mode: auto  # 开启ACK自动确认[NONE 无确认、MANUAL 手动确实、AUTO 自动确认(默认方式)]
+        concurrency: 10 # 消费者最小数量
+        max-concurrency: 100 # 消费者最大数量
+        # 是否支持重试
+        retry:
+          enabled: true
       # 交换模式
-      direct:
-        acknowledge-mode: manual  # 开启ACK自动确认
+#      direct:
+#        acknowledge-mode: MANUAL  # 开启ACK手动确认[手动模式要自己在代码逻辑中去手动确认]

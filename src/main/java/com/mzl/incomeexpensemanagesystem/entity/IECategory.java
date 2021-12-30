@@ -29,11 +29,13 @@ public class IECategory implements Serializable {
         @TableId(value = "i_e_category_id", type = IdType.AUTO)
       private Integer iECategoryId;
 
+      @ApiModelProperty(value = "用户自增id")
+      private Integer userId;
+
       @ApiModelProperty(value = "父收支类型")
       private String parentCategory;
 
       @ApiModelProperty(value = "子收支类型")
       private String sonCategory;
-
 
 }
