@@ -77,18 +77,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     /**
      * 获取当前用户(根据token)
-     * @param request
+     * @param
      * @return
      */
     @Override
-    public String getUserId(HttpServletRequest request) {
+    public Integer getUserId() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         // 取得token
         String tokenHeader = request.getHeader(JwtTokenUtil.TOKEN_HEADER);
         tokenHeader = tokenHeader.replace(JwtTokenUtil.TOKEN_PREFIX, "").trim();
         log.info(tokenHeader);
         String userId = JwtTokenUtil.getObjectId(tokenHeader);
         log.info("解析token得到UserId为: " + userId);
-        return userId;
+        return Integer.parseInt(userId);
     }
 
     /**
@@ -96,8 +97,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public User getUser(){
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        Integer userId  = Integer.valueOf(getUserId(request));
+        Integer userId  = getUserId();
         User user = userMapper.selectById(userId);
         return user;
     }
@@ -220,7 +220,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public RetResult userLogout(HttpServletRequest request) {
         //清除用户的token
         //解析出用户的userid
-        String userId = userService.getUserId(request);
+        String userId = String.valueOf(userService.getUserId());
         redisTemplate.delete(TOKEN_KEY_PREFIX + userId);
         return RetResult.success(RetCodeEnum.LOGOUT_SUCCESS);
     }

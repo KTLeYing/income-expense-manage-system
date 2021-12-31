@@ -26,7 +26,16 @@ public class StatisticVo implements Serializable {
     @ApiModelProperty(value = "月份")
     private String month;
 
+    @ApiModelProperty(value = "年份")
+    private String year;
+
     @ApiModelProperty(value = "钱数")
     private Double num;
+
+    @ApiModelProperty(value = "子类名称")
+    private String sonCategory;
+
+    @ApiModelProperty(value = "子类占比")
+    private Double sonCategoryPercent;
 
 }

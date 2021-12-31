@@ -30,11 +30,66 @@
         </where>
     </select>
 
+    <!--统计近10年的收支-->
+    <select id="statisticTenYear" resultType="com.mzl.incomeexpensemanagesystem.vo.StatisticVo">
+        select DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y') as year, sum(r.num) as num from i_e_record r, i_e_category c
+        where c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y') between #{leastYear} and #{year}
+        and c.parent_category = #{parentCategory} group by DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y')
+    </select>
+
     <!--按年统计每月的收入-->
     <select id="statisticByYear" resultType="com.mzl.incomeexpensemanagesystem.vo.StatisticVo">
         select DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%m') as month, sum(r.num) as num from i_e_record r, i_e_category c
         where c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y') = #{year}
         and c.parent_category = #{parentCategory} group by DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%m')
+    </select>
+
+    <!--根据年-月份统计收支各子类-->
+    <select id="statisticSonCategory" resultType="com.mzl.incomeexpensemanagesystem.vo.StatisticVo">
+        select t1.sonCategory, t1.num as num, round(t1.num/t2.num, 2) as sonCategoryPercent from (select c.son_category as sonCategory, sum(r.num) as num from i_e_record r, i_e_category c where c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y-%m') = #{time}
+        and c.parent_category = #{parentCategory} group by sonCategory) t1, (select sum(r.num) as num  from i_e_record r, i_e_category c WHERE c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y-%m') = #{time}
+        and c.parent_category = #{parentCategory}) t2
+    </select>
+
+    <!--根据自定义时间段统计收支各子类-->
+    <select id="statisticByPeriod" resultType="com.mzl.incomeexpensemanagesystem.vo.StatisticVo">
+        select c.son_category as sonCategory, sum(r.num) as num from i_e_record r, i_e_category c where c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y-%m-%d') between #{fromTime} and #{toTime}
+        and c.parent_category = #{parentCategory} group by sonCategory
+    </select>
+
+    <!--统计今天收支-->
+    <select id="statisticToday" resultType="java.lang.Double">
+        select sum(r.num) as num from i_e_record r, i_e_category c where c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and DATE(DATE_ADD(r.create_time, INTERVAL 8 hour)) = CURDATE()
+        and c.parent_category = #{parentCategory}
+    </select>
+
+    <!--统计本周收支-->
+    <select id="statisticThisWeek" resultType="java.lang.Double">
+        select sum(r.num) as num from i_e_record r, i_e_category c where c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and YEARWEEK(date_format(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y-%m-%d')) = YEARWEEK(now())
+        and c.parent_category = #{parentCategory}
+    </select>
+
+    <!--统计本月收支-->
+    <select id="statisticThisMonth" resultType="java.lang.Double">
+        select sum(r.num) as num from i_e_record r, i_e_category c where c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y-%m') = DATE_FORMAT(CURDATE(), '%Y-%m')
+        and c.parent_category = #{parentCategory}
+    </select>
+
+    <!--统计本年收支-->
+    <select id="statisticThisYear" resultType="java.lang.Double">
+        select sum(r.num) as num from i_e_record r, i_e_category c where c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and YEAR(DATE_ADD(r.create_time, INTERVAL 8 hour)) = YEAR(NOW())
+        and c.parent_category = #{parentCategory}
+    </select>
+
+    <!--某个月总收支统计-->
+    <select id="monthTotal" resultType="java.lang.Double">
+         select sum(r.num) as num from i_e_record r where r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y-%m') = #{yearMonth}
+    </select>
+
+    <!--某个月收支统计-->
+    <select id="monthCount" resultType="com.mzl.incomeexpensemanagesystem.vo.AnalysisVo">
+        select count(1) as recordNum, sum(r.num) as num from i_e_record r, i_e_category c where c.i_e_category_id = r.i_e_category_id
+        and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y-%m') = #{yearMonth} and c.parent_category = #{parentCategory}
     </select>
 
 

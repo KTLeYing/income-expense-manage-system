@@ -4,6 +4,7 @@ import com.mzl.incomeexpensemanagesystem.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mzl.incomeexpensemanagesystem.response.RetResult;
 import com.mzl.incomeexpensemanagesystem.vo.UserVo;
+import io.swagger.models.auth.In;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -37,10 +38,10 @@ public interface UserService extends IService<User> {
 
     /**
      * 获取当前用户(根据token)
-     * @param request
+     * @param
      * @return
      */
-    String getUserId(HttpServletRequest request);
+    Integer getUserId();
 
     /**
      * 获取当前用户所有具体信息（辅助用）

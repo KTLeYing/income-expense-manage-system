@@ -24,16 +24,34 @@ public class IEStatisticController {
     @Autowired
     private IERecordService ieRecordService;
 
+    @GetMapping("/statisticTenYear")
+    @ApiOperation(value = "统计最近10年的收支")
+    public RetResult statisticTenYear(){
+        return ieRecordService.statisticTenYear();
+    }
+
     @GetMapping("/statisticByYear")
-    @ApiOperation(value = "根据年份统计每月收支")
+    @ApiOperation(value = "根据年份统计每月的收支")
     public RetResult statisticByYear(String year){
         return ieRecordService.statisticByYear(year);
     }
 
-    @GetMapping("/statisticByMonth")
-    @ApiOperation(value = "根据年-月份统计各子类收支")
+    @GetMapping("/statisticSonCategory")
+    @ApiOperation(value = "根据年-月份统计收支各子类")
     public RetResult statisticSonCategory(String time){
         return ieRecordService.statisticSonCategory(time);
+    }
+
+    @GetMapping("/statisticByPeriod")
+    @ApiOperation(value = "根据自定义时间段统计收支各子类 年-月-日")
+    public RetResult statisticByPeriod(String fromTime, String toTime){
+        return ieRecordService.statisticByPeriod(fromTime, toTime);
+    }
+
+    @GetMapping("/statisticRecent")
+    @ApiOperation(value = "统计当前的收支 今天、本周、本月、本年")
+    public RetResult statisticRecent(){
+        return ieRecordService.statisticRecent();
     }
 
 }

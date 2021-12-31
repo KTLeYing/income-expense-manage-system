@@ -63,16 +63,43 @@ public interface IERecordService extends IService<IERecord> {
     RetResult deleteBatchRecord(Integer[] ids);
 
     /**
-     * 根据年份统计
+     * 根据年份统计每月收支
      * @param year
      * @return
      */
     RetResult statisticByYear(String year);
 
     /**
-     * 根据年-月份统计各子类收支
+     * 根据年-月份统计收支各子类
      * @param time
      * @return
      */
     RetResult statisticSonCategory(String time);
+
+    /**
+     * 统计最近10年的收支
+     * @param
+     * @return
+     */
+    RetResult statisticTenYear();
+
+    /**
+     * 根据自定义时间段统计收支各子类
+     * @param fromTime
+     * @param toTime
+     * @return
+     */
+    RetResult statisticByPeriod(String fromTime, String toTime);
+
+    /**
+     * 统计当前的收支 今天、本周、本月、本年
+     * @return
+     */
+    RetResult statisticRecent();
+
+    /**
+     * 根据年-月来分析收支
+     * @return
+     */
+    RetResult analysisByMonth(String yearMonth) throws ParseException;
 }

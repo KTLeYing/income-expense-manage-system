@@ -48,7 +48,7 @@ public class ApiInterceptor implements HandlerInterceptor {
         //去掉前缀的token
         String token1 = token.replace(JwtTokenUtil.TOKEN_PREFIX, "").trim();
         //解析出用户的userid
-        String userId = userService.getUserId(request);
+        String userId = String.valueOf(userService.getUserId());
         //如果在redis，且redis的token正确的
         if (redisTemplate.hasKey(TOKEN_KEY_PREFIX + userId) && redisTemplate.opsForValue().get(TOKEN_KEY_PREFIX + userId).equals(token1)){
             //对token进行校验，不抛出异常则token正确
