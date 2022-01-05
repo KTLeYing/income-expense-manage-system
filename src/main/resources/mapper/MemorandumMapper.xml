@@ -7,4 +7,21 @@
         memorandum_id, user_id, save_path, content, create_time
     </sql>
 
-    </mapper>
+    <!--分页模糊查询备忘录-->
+    <select id="selectPageMemorandum" resultType="com.mzl.incomeexpensemanagesystem.vo.MemorandumVo">
+        select * from memorandum
+        <where>
+            user_id = #{memorandumVo.userId}
+            <if test="memorandumVo.title != '' and memorandumVo.title != null">
+                and title like '%${memorandumVo.title}%'
+            </if>
+            <if test="memorandumVo.content != '' and memorandumVo.content != null">
+                and content like '%${memorandumVo.content}%'
+            </if>
+            <if test="memorandumVo.realCreateTime != '' and memorandumVo.realCreateTime != null">
+                and DATE_FORMAT(DATE_ADD(create_time, INTERVAL 8 hour), '%Y-%m-%d') = #{memorandumVo.realCreateTime}
+            </if>
+        </where>
+    </select>
+
+</mapper>

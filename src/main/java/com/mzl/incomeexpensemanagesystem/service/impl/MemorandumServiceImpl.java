@@ -1,10 +1,19 @@
 package com.mzl.incomeexpensemanagesystem.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mzl.incomeexpensemanagesystem.entity.Memorandum;
 import com.mzl.incomeexpensemanagesystem.mapper.MemorandumMapper;
+import com.mzl.incomeexpensemanagesystem.response.RetResult;
 import com.mzl.incomeexpensemanagesystem.service.MemorandumService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.mzl.incomeexpensemanagesystem.service.UserService;
+import com.mzl.incomeexpensemanagesystem.vo.MemorandumVo;
+import com.mzl.incomeexpensemanagesystem.vo.WishListVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
  * <p>
@@ -16,5 +25,70 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MemorandumServiceImpl extends ServiceImpl<MemorandumMapper, Memorandum> implements MemorandumService {
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private MemorandumMapper memorandumMapper;
+
+    /**
+     * 添加备忘录
+     * @param memorandum
+     * @return
+     */
+    @Override
+    public RetResult addMemorandum(Memorandum memorandum) {
+        memorandum.setUserId(userService.getUserId());
+        Date now = new Date();
+        memorandum.setCreateTime(now);
+        memorandumMapper.insert(memorandum);
+        return RetResult.success();
+    }
+
+    /**
+     * 修改备忘录
+     * @param memorandum
+     * @return
+     */
+    @Override
+    public RetResult updateMemorandum(Memorandum memorandum) {
+        memorandum.setUserId(userService.getUserId());
+        memorandumMapper.updateById(memorandum);
+        return RetResult.success();
+    }
+
+    /**
+     * 删除备忘录
+     * @param id
+     * @return
+     */
+    @Override
+    public RetResult deleteMemorandum(Integer id) {
+        memorandumMapper.deleteById(id);
+        return RetResult.success();
+    }
+
+    /**
+     * 分页模糊查询备忘录
+     * @param memorandumVo
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public RetResult selectPageMemorandum(MemorandumVo memorandumVo, Integer currentPage, Integer pageSize) {
+        if (currentPage == null || currentPage == 0){
+            currentPage = 1;
+        }
+        if (pageSize == null || pageSize == 0){
+            pageSize = 10;
+        }
+        memorandumVo.setUserId(userService.getUserId());
+        //分页查询
+        IPage<MemorandumVo> page = new Page<>(currentPage, pageSize);
+        IPage<MemorandumVo> wishListPage = memorandumMapper.selectPageMemorandum(page, memorandumVo);
+        return RetResult.success(wishListPage);
+    }
 
 }

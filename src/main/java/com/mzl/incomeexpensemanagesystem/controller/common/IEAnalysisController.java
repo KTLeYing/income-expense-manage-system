@@ -27,10 +27,15 @@ public class IEAnalysisController {
     private IERecordService ieRecordService;
 
     @GetMapping("/analysisByMonth")
-    @ApiOperation(value = "根据年-月来分析收支")
+    @ApiOperation(value = "根据年-月来分析收支(本月 VS 上个月)")
     public RetResult analysisByMonth(String yearMonth) throws ParseException {
         return ieRecordService.analysisByMonth(yearMonth);
     }
 
+    @GetMapping("/analysisByYear")
+    @ApiOperation(value = "根据年份来分析收支(本年 VS 上一年)")
+    public RetResult analysisByYear(String year) throws ParseException {
+        return ieRecordService.analysisByYear(year);
+    }
 
 }

@@ -92,5 +92,30 @@
         and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y-%m') = #{yearMonth} and c.parent_category = #{parentCategory}
     </select>
 
+    <!--某个月总收支统计-->
+    <select id="yearTotal" resultType="java.lang.Double">
+         select sum(r.num) as num from i_e_record r where r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y') = #{year}
+    </select>
+
+    <!--某个月收支统计-->
+    <select id="yearCount" resultType="com.mzl.incomeexpensemanagesystem.vo.AnalysisVo">
+        select count(1) as recordNum, sum(r.num) as num from i_e_record r, i_e_category c where c.i_e_category_id = r.i_e_category_id
+        and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y') = #{year} and c.parent_category = #{parentCategory}
+    </select>
+
+    <!--查询月(年-月)收支排行榜Top10-->
+    <select id="monthRank" resultType="com.mzl.incomeexpensemanagesystem.vo.StatisticVo">
+        select t1.sonCategory, t1.num as num, round(t1.num/t2.num, 2) as sonCategoryPercent from (select c.son_category as sonCategory, sum(r.num) as num from i_e_record r, i_e_category c where c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y-%m') = #{yearMonth}
+        and c.parent_category = #{parentCategory} group by sonCategory) t1, (select sum(r.num) as num  from i_e_record r, i_e_category c WHERE c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y-%m') = #{yearMonth}
+        and c.parent_category = #{parentCategory}) t2 order by num desc limit 0, 10
+    </select>
+
+    <!--查询年收支排行榜Top10-->
+    <select id="yearRank" resultType="com.mzl.incomeexpensemanagesystem.vo.StatisticVo">
+        select t1.sonCategory, t1.num as num, round(t1.num/t2.num, 2) as sonCategoryPercent from (select c.son_category as sonCategory, sum(r.num) as num from i_e_record r, i_e_category c where c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y') = #{year}
+        and c.parent_category = #{parentCategory} group by sonCategory) t1, (select sum(r.num) as num  from i_e_record r, i_e_category c WHERE c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y') = #{year}
+        and c.parent_category = #{parentCategory}) t2 order by num desc limit 0, 10
+    </select>
+
 
 </mapper>

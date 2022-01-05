@@ -45,6 +45,9 @@ public class Memorandum implements Serializable {
       @ApiModelProperty(value = "内容")
       private String content;
 
+      @ApiModelProperty(value = "备忘录标题")
+      private String title;
+
       @ApiModelProperty(value = "记录时间/创建时间")
       @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
       @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

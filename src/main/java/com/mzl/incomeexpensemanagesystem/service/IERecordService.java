@@ -98,8 +98,16 @@ public interface IERecordService extends IService<IERecord> {
     RetResult statisticRecent();
 
     /**
-     * 根据年-月来分析收支
+     * 根据年-月来分析收支(本月 VS 上个月)
      * @return
      */
     RetResult analysisByMonth(String yearMonth) throws ParseException;
+
+    /**
+     * 根据年份来分析收支(本年 VS 上一年)
+     * @param year
+     * @return
+     */
+    RetResult analysisByYear(String year) throws ParseException;
+
 }

@@ -1,7 +1,9 @@
 package com.mzl.incomeexpensemanagesystem.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.mzl.incomeexpensemanagesystem.entity.Memorandum;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.mzl.incomeexpensemanagesystem.vo.MemorandumVo;
 
 /**
  * <p>
@@ -13,4 +15,11 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface MemorandumMapper extends BaseMapper<Memorandum> {
 
+    /**
+     * 分页模糊查询备忘录
+     * @param page
+     * @param memorandumVo
+     * @return
+     */
+    IPage<MemorandumVo> selectPageMemorandum(IPage<MemorandumVo> page, MemorandumVo memorandumVo);
 }

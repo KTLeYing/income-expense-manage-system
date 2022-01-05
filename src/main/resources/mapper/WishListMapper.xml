@@ -7,4 +7,25 @@
         wish_list_id, user_id, name, content, num, state, create_time
     </sql>
 
-    </mapper>
+    <!--分页模糊查询心愿单-->
+    <select id="selectPageWish" resultType="com.mzl.incomeexpensemanagesystem.vo.WishListVo">
+        select * from wish_list
+        <where>
+            user_id = #{wishListVo.userId}
+            <if test="wishListVo.name != '' and wishListVo.name != null">
+                and name like '%${wishListVo.name}%'
+            </if>
+            <if test="wishListVo.content != '' and wishListVo.content != null">
+                and content like '%${wishListVo.content}%'
+            </if>
+            <if test="wishListVo.state != 0 and wishListVo.state != null">
+                and state = #{wishListVo.state}
+            </if>
+            <if test="wishListVo.realCreateTime != '' and wishListVo.realCreateTime != null">
+                and DATE_FORMAT(DATE_ADD(create_time, INTERVAL 8 hour), '%Y-%m-%d') = #{wishListVo.realCreateTime}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

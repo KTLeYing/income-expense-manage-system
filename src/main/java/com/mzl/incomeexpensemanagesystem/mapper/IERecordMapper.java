@@ -112,4 +112,37 @@ public interface IERecordMapper extends BaseMapper<IERecord> {
      */
     AnalysisVo monthCount(String yearMonth, String parentCategory, Integer userId);
 
+    /**
+     * 某一年总收支统计
+     * @param year
+     * @return
+     */
+    Double yearTotal(String year, Integer userId);
+
+    /**
+     * 某一年收支统计
+     * @param year
+     * @param parentCategory
+     * @param userId
+     * @return
+     */
+    AnalysisVo yearCount(String year, String parentCategory, Integer userId);
+
+    /**
+     * 查询月(年-月)收支排行榜Top10
+     * @param parentCategory
+     * @param userId
+     * @param yearMonth
+     * @return
+     */
+    List<StatisticVo> monthRank(String parentCategory, Integer userId, String yearMonth);
+
+    /**
+     * 查询年收支排行榜Top10
+     * @param parentCategory
+     * @param userId
+     * @param year
+     * @return
+     */
+    List<StatisticVo> yearRank(String parentCategory, Integer userId, String year);
 }

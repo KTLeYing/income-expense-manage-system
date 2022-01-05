@@ -2,6 +2,7 @@ package com.mzl.incomeexpensemanagesystem.mapper;
 
 import com.mzl.incomeexpensemanagesystem.entity.Budget;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.swagger.models.auth.In;
 
 /**
  * <p>
@@ -13,4 +14,18 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface BudgetMapper extends BaseMapper<Budget> {
 
+    /**
+     * 查询月(年-月)预算
+     * @param yearMonth
+     * @return
+     */
+    Budget selectMonthBudget(Integer userId, String yearMonth);
+
+    /**
+     * 查询年预算
+     * @param userId
+     * @param year
+     * @return
+     */
+    Budget selectYearBudget(Integer userId, String year);
 }

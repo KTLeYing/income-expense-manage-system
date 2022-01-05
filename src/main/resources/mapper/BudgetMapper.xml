@@ -7,4 +7,15 @@
         budget_id, user_id, num, create_time
     </sql>
 
-    </mapper>
+    <!--查询月(年-月)预算-->
+    <select id="selectMonthBudget" resultType="com.mzl.incomeexpensemanagesystem.entity.Budget">
+        select * from budget where user_id = #{userId} and DATE_FORMAT(DATE_ADD(create_time, INTERVAL 8 hour), '%Y-%m') = #{yearMonth} and type = 1
+    </select>
+
+    <!--查询年预算-->
+    <select id="selectYearBudget" resultType="com.mzl.incomeexpensemanagesystem.entity.Budget">
+        select * from budget where user_id = #{userId} and DATE_FORMAT(DATE_ADD(create_time, INTERVAL 8 hour), '%Y') = #{year} and type = 2
+    </select>
+
+
+</mapper>

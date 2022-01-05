@@ -43,7 +43,10 @@ public enum RetCodeEnum {
     SEND_MESSAGE_FAIL(302, "短信发送失败"),
 
     //收支枚举类
-    SON_CATEGORY_EXISTS(401, "子类型已存在")
+    SON_CATEGORY_EXISTS(401, "子类型已存在"),
+
+    //预算枚举类
+    DATA_EMPTY(501, "当前数据为空")
 
     ;
 
