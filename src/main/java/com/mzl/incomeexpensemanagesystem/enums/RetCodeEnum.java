@@ -46,8 +46,11 @@ public enum RetCodeEnum {
     SON_CATEGORY_EXISTS(401, "子类型已存在"),
 
     //预算枚举类
-    DATA_EMPTY(501, "当前数据为空")
+    DATA_EMPTY(501, "当前数据为空"),
 
+    //新闻模块枚举
+    USER_COLLECT_NEWS(601, "用户已收藏此新闻"),
+    USER_UN_COLLECTED_NEWS(602, "用户未收藏此新闻"),
     ;
 
     private Integer code;

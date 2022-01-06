@@ -225,6 +225,12 @@
             <version>1.6.0</version>
         </dependency>
 
+        <!--quartz动态定时任务-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-quartz</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

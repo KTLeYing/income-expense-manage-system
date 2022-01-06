@@ -7,4 +7,37 @@
         news_id, title, author, keyword, visit_count, content, create_time
     </sql>
 
-    </mapper>
+    <!--新闻浏览数+1-->
+    <update id="updateVisitCount">
+        update news set visit_count = visit_count + 1 where news_id = #{id}
+    </update>
+
+    <!--分页模糊查询用户收藏新闻的列表(当前用户收藏了那些新闻)-->
+    <select id="selectPageCollectNews" resultType="com.mzl.incomeexpensemanagesystem.vo.NewsVo">
+        select n.* from news n, user_news un
+        <where>
+            n.news_id = un.news_id and un.user_id = #{newsVo.userId} and un.status = 1
+            <if test="newsVo.title != '' and newsVo.title != null">
+                and n.title like '%${newsVo.title}%'
+            </if>
+            <if test="newsVo.keyword != '' and newsVo.keyword != null">
+                and n.keyword like '%${newsVo.keyword}%'
+            </if>
+            <if test="newsVo.content != '' and newsVo.content != null">
+                and n.content like '%${newsVo.content}%'
+            </if>
+            <if test="newsVo.author != '' and newsVo.author != null">
+                and n.author like '%${newsVo.author}%'
+            </if>
+            <if test="newsVo.type != 0 and newsVo.type != null">
+                and n.type = #{newsVo.type}
+            </if>
+        </where>
+    </select>
+
+    <!--根据浏览数获取热门新闻(TOP10)-->
+    <select id="selectHotNews" resultType="com.mzl.incomeexpensemanagesystem.entity.News">
+        select * from news order by visit_count desc limit 0, 10
+    </select>
+
+</mapper>

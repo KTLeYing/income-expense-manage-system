@@ -20,7 +20,7 @@ public class MysqlGeneratorTest {
     public static void main(String[] args) {
         MysqlGenerator mysqlGenerator = new MysqlGenerator();
         mysqlGenerator.generator("v_ktlema", SeniorityEnum.MOGUL, jdbcDriverName, jdbcUsername,
-                jdbcPassword, jdbcUrl, "", "wish_list");
+                jdbcPassword, jdbcUrl, "", "announcement");
     }
 
 }

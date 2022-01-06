@@ -48,8 +48,14 @@ public class News implements Serializable {
       @ApiModelProperty(value = "访问数")
       private Long visitCount;
 
+      @ApiModelProperty(value = "收藏数")
+      private Long collectCount;
+
       @ApiModelProperty(value = "内容")
       private String content;
+
+      @ApiModelProperty(value = "类型，1: 转载   2：自写")
+      private Integer type;
 
       @ApiModelProperty(value = "创建时间")
       @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
