@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80019
 File Encoding         : 65001
 
-Date: 2022-01-05 11:10:37
+Date: 2022-01-06 21:01:59
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -24,12 +24,38 @@ CREATE TABLE `admin` (
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '管理员名',
   `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '密码',
   `avatar_path` varchar(255) DEFAULT NULL COMMENT '头像路径',
-  PRIMARY KEY (`admin_id`)
+  PRIMARY KEY (`admin_id`),
+  KEY `admin_name_IDX` (`name`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='管理员表';
 
 -- ----------------------------
 -- Records of admin
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for announcement
+-- ----------------------------
+DROP TABLE IF EXISTS `announcement`;
+CREATE TABLE `announcement` (
+  `announcement_id` int NOT NULL AUTO_INCREMENT COMMENT '公告自增id',
+  `title` varchar(255) DEFAULT NULL COMMENT '公告标题',
+  `content` text COMMENT '公告内容',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '公告发布时间',
+  PRIMARY KEY (`announcement_id`),
+  KEY `announcement_title_IDX` (`title`) USING BTREE,
+  KEY `announcement_create_time_IDX` (`create_time`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of announcement
+-- ----------------------------
+INSERT INTO `announcement` VALUES ('1', '公告1', '静待花开减肥换句话说', '2022-01-06 12:35:54');
+INSERT INTO `announcement` VALUES ('2', '公告2', '静待花开减肥换句话说', '2021-02-06 12:35:54');
+INSERT INTO `announcement` VALUES ('3', '公告3', '静待花开减肥换句话说', '2022-01-06 10:35:54');
+INSERT INTO `announcement` VALUES ('4', '公告4', '静待花开减肥换句话说', '2021-12-07 12:35:54');
+INSERT INTO `announcement` VALUES ('5', '公告5', '静待花开减肥换句话说', '2021-11-06 12:35:54');
+INSERT INTO `announcement` VALUES ('6', '公告6', '静待花开减肥换句话说', '2022-01-03 12:35:54');
+INSERT INTO `announcement` VALUES ('7', '公告7', '静待花开减肥换句话说', '2022-01-01 12:35:54');
 
 -- ----------------------------
 -- Table structure for budget
@@ -41,12 +67,19 @@ CREATE TABLE `budget` (
   `num` double DEFAULT NULL COMMENT '预算数量',
   `type` tinyint DEFAULT '1' COMMENT '1：月预算   2: 年预算',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`budget_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='预算表';
+  PRIMARY KEY (`budget_id`),
+  KEY `budget_budget_id_IDX` (`budget_id`) USING BTREE,
+  KEY `budget_type_IDX` (`type`) USING BTREE,
+  KEY `budget_create_time_IDX` (`create_time`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='预算表';
 
 -- ----------------------------
 -- Records of budget
 -- ----------------------------
+INSERT INTO `budget` VALUES ('3', '1', '1000', '1', '2022-01-05 03:18:35');
+INSERT INTO `budget` VALUES ('5', '1', '30000', '1', '2021-12-05 03:19:36');
+INSERT INTO `budget` VALUES ('6', '1', '20000', '2', '2022-01-05 03:23:51');
+INSERT INTO `budget` VALUES ('8', '1', '50000', '2', '2021-01-05 03:27:15');
 
 -- ----------------------------
 -- Table structure for i_e_category
@@ -57,7 +90,10 @@ CREATE TABLE `i_e_category` (
   `user_id` int DEFAULT NULL COMMENT '用户id',
   `parent_category` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '父收支类型，只有 收入  和  支出两种',
   `son_category` varchar(255) DEFAULT NULL COMMENT '子收支类型',
-  PRIMARY KEY (`i_e_category_id`)
+  PRIMARY KEY (`i_e_category_id`),
+  KEY `i_e_category_user_id_IDX` (`user_id`) USING BTREE,
+  KEY `i_e_category_parent_category_IDX` (`parent_category`) USING BTREE,
+  KEY `i_e_category_son_category_IDX` (`son_category`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COMMENT='收支类型';
 
 -- ----------------------------
@@ -90,8 +126,12 @@ CREATE TABLE `i_e_record` (
   `num` double DEFAULT NULL COMMENT '收支数量(钱数)',
   `note` varchar(255) DEFAULT NULL COMMENT '收支备注',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '记录时间',
-  PRIMARY KEY (`i_e_record_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8 COMMENT='收支记录表';
+  PRIMARY KEY (`i_e_record_id`),
+  KEY `i_e_record_user_id_IDX` (`user_id`) USING BTREE,
+  KEY `i_e_record_i_e_category_id_IDX` (`i_e_category_id`) USING BTREE,
+  KEY `i_e_record_note_IDX` (`note`) USING BTREE,
+  KEY `i_e_record_create_time_IDX` (`create_time`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8 COMMENT='收支记录表';
 
 -- ----------------------------
 -- Records of i_e_record
@@ -136,6 +176,8 @@ INSERT INTO `i_e_record` VALUES ('41', '1', '3', '2000', '2011.11的伙食费', 
 INSERT INTO `i_e_record` VALUES ('42', '1', '3', '5000', '2012.11的伙食费', '2012-11-16 06:17:18');
 INSERT INTO `i_e_record` VALUES ('43', '1', '4', '800', '2012.10的护肤品', '2012-10-16 06:17:18');
 INSERT INTO `i_e_record` VALUES ('44', '1', '4', '300', '2011.10的护肤品', '2011-10-16 06:17:18');
+INSERT INTO `i_e_record` VALUES ('45', '1', '4', '300', '2022.01的护肤品', '2022-01-04 06:17:18');
+INSERT INTO `i_e_record` VALUES ('46', '1', '2', '6000', '2021.12的工资', '2022-01-05 05:18:49');
 
 -- ----------------------------
 -- Table structure for memorandum
@@ -145,14 +187,23 @@ CREATE TABLE `memorandum` (
   `memorandum_id` int NOT NULL AUTO_INCREMENT COMMENT '备忘录自增id',
   `user_id` int DEFAULT NULL COMMENT '用户id',
   `save_path` varchar(255) DEFAULT NULL COMMENT '文件保存路径',
+  `title` varchar(255) DEFAULT NULL COMMENT '备忘录标题',
   `content` text COMMENT '内容',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '记录时间/创建时间',
-  PRIMARY KEY (`memorandum_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='备忘录表';
+  PRIMARY KEY (`memorandum_id`),
+  KEY `memorandum_user_id_IDX` (`user_id`) USING BTREE,
+  KEY `memorandum_title_IDX` (`title`) USING BTREE,
+  KEY `memorandum_create_time_IDX` (`create_time`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='备忘录表';
 
 -- ----------------------------
 -- Records of memorandum
 -- ----------------------------
+INSERT INTO `memorandum` VALUES ('1', '1', '', 'flag', '冲冲冲', '2022-01-05 08:18:52');
+INSERT INTO `memorandum` VALUES ('2', '1', '', '我的鼓励flag', '冲冲冲呀呀哎呀', '2022-01-04 08:19:58');
+INSERT INTO `memorandum` VALUES ('3', '1', '', '鼓励flag', '加油加油呀', '2022-01-05 08:20:17');
+INSERT INTO `memorandum` VALUES ('4', '1', '', 'mzl座右铭', 'mzl加油嘻嘻', '2022-01-04 08:20:38');
+INSERT INTO `memorandum` VALUES ('5', '1', '', 'mzl座右铭1', 'mzl加油嘻1', '2022-01-05 08:22:10');
 
 -- ----------------------------
 -- Table structure for news
@@ -163,15 +214,36 @@ CREATE TABLE `news` (
   `title` varchar(255) DEFAULT NULL COMMENT '新闻标题',
   `author` varchar(255) DEFAULT NULL COMMENT '作者',
   `keyword` varchar(255) DEFAULT NULL COMMENT '关键词',
-  `visit_count` bigint DEFAULT NULL COMMENT '访问数',
+  `visit_count` bigint DEFAULT '0' COMMENT '访问数',
+  `collect_count` bigint DEFAULT '0' COMMENT '收藏数',
   `content` text COMMENT '内容',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`news_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='新闻表';
+  `type` tinyint DEFAULT '1' COMMENT '类型，1: 转载   2：自写',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`news_id`),
+  KEY `news_title_IDX` (`title`) USING BTREE,
+  KEY `news_author_IDX` (`author`) USING BTREE,
+  KEY `news_keyword_IDX` (`keyword`) USING BTREE,
+  KEY `news_type_IDX` (`type`) USING BTREE,
+  KEY `news_create_time_IDX` (`create_time`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='新闻表';
 
 -- ----------------------------
 -- Records of news
 -- ----------------------------
+INSERT INTO `news` VALUES ('1', '理财技巧', '马振乐', '理财', '37', '1', '发货嘎返回格式发·就按国家感觉到·感觉高加个加读后感·', '2', '2022-01-06 07:46:20');
+INSERT INTO `news` VALUES ('2', '理财一', '马振一', '理财1', '56', '1', '一发货嘎返回格式发·就按国家感觉到·感觉高加个加读后感·', '1', '2022-01-06 07:46:26');
+INSERT INTO `news` VALUES ('3', '理财二', '马振二', '理财2', '121', '2', '二发货嘎返回格式发·就按国家感觉到·感觉高加个加读后感·', '1', '2022-01-06 07:46:26');
+INSERT INTO `news` VALUES ('4', '理财三', '马振三', '理财3', '1', '1', '三发货嘎返回格式发·就按国家感觉到·感觉高加个加读后感·', '1', '2022-01-06 15:46:56');
+INSERT INTO `news` VALUES ('5', '理财技巧四', '马振四', '理财4', '78', '0', '四发货嘎返回格式发·就按国家感觉到·感觉高加个加读后感·', '2', '2022-01-06 15:46:56');
+INSERT INTO `news` VALUES ('6', '理财技巧五', '马振五', '理财5', '90', '0', '四发货嘎返回格式发·就按国家感觉到·感觉高加个加读后感·', '2', '2022-01-06 15:46:56');
+INSERT INTO `news` VALUES ('7', '理财技巧六', '马振六', '理财6', '90', '0', '四发货嘎返回格式发·就按国家感觉到·感觉高加个加读后感·', '2', '2022-01-06 15:46:56');
+INSERT INTO `news` VALUES ('8', '理财技巧七', '马振七', '理财7', '32', '0', '四发货嘎返回格式发·就按国家感觉到·感觉高加个加读后感·', '2', '2022-01-06 15:46:56');
+INSERT INTO `news` VALUES ('9', '理财技巧八', '马振八', '理财8', '2', '0', '四发货嘎返回格式发·就按国家感觉到·感觉高加个加读后感·', '2', '2022-01-06 15:46:56');
+INSERT INTO `news` VALUES ('10', '理财技巧九', '马振九', '理财9', '2', '0', '四发货嘎返回格式发·就按国家感觉到·感觉高加个加读后感·', '2', '2022-01-06 15:46:56');
+INSERT INTO `news` VALUES ('11', '理财技巧十', '马振十', '理财10', '12', '0', '四发货嘎返回格式发·就按国家感觉到·感觉高加个加读后感·', '2', '2022-01-06 15:46:56');
+INSERT INTO `news` VALUES ('12', '理财技巧11', '马振11', '理财11', '18', '0', '四发货嘎返回格式发·就按国家感觉到·感觉高加个加读后感·', '2', '2022-01-06 15:46:56');
+INSERT INTO `news` VALUES ('13', '理财技巧12', '马振12', '理财12', '26', '0', '四发货嘎返回格式发·就按国家感觉到·感觉高加个加读后感·', '2', '2022-01-06 15:46:56');
+INSERT INTO `news` VALUES ('14', '理财技巧13', '马振13', '理财13', '7', '0', '四发货嘎返回格式发·就按国家感觉到·感觉高加个加读后感·', '2', '2022-01-06 15:46:56');
 
 -- ----------------------------
 -- Table structure for user
@@ -189,14 +261,18 @@ CREATE TABLE `user` (
   `deleted` tinyint DEFAULT '1' COMMENT '是否已经删除，1：未删除  0: 已删除',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
   `last_login_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '上次登录时间',
-  PRIMARY KEY (`user_id`)
+  PRIMARY KEY (`user_id`),
+  KEY `user_username_IDX` (`username`) USING BTREE,
+  KEY `user_email_IDX` (`email`) USING BTREE,
+  KEY `user_phone_IDX` (`phone`) USING BTREE,
+  KEY `user_create_time_IDX` (`create_time`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'mzl', 'f3e89b784335e8a75839e29d367949a97970280899f7dc0a', '1', '2198902814@qq.com', '13652707142', 'http://localhost:8080/ddgh/ttthhh.jpg', '1', '1', '2021-12-24 19:35:13', '2022-01-04 01:58:02');
-INSERT INTO `user` VALUES ('2', 'sky', '43f115574c1bc6457e215d9ca5a08910c477868778a8e71e', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-24 19:35:13', '2021-12-24 12:47:06');
+INSERT INTO `user` VALUES ('1', 'mzl', 'f3e89b784335e8a75839e29d367949a97970280899f7dc0a', '1', '2198902814@qq.com', '13652707142', 'http://localhost:8080/ddgh/ttthhh.jpg', '1', '1', '2021-12-24 19:35:13', '2022-01-06 07:52:19');
+INSERT INTO `user` VALUES ('2', 'sky', '43f115574c1bc6457e215d9ca5a08910c477868778a8e71e', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-24 19:35:13', '2022-01-06 08:59:13');
 INSERT INTO `user` VALUES ('3', 'lisi', '43f115574c1bc6457e215d9ca5a08910c477868778a8e71e', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-24 19:35:13', '2021-12-24 19:36:31');
 INSERT INTO `user` VALUES ('4', 'wangwu', 'f6535896342371b582d4408f22f745d8af30a4e77fb35005', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-24 20:33:31', '2021-12-24 20:33:31');
 INSERT INTO `user` VALUES ('5', 'lili', '358448c4393ac4b389c69185773565d45c89320803d25571', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-24 20:48:53', '2021-12-24 20:48:53');
@@ -234,6 +310,30 @@ INSERT INTO `user` VALUES ('36', 'lolu', '98b435e23801e1a784398d20b5d907e70a6733
 INSERT INTO `user` VALUES ('37', 'go', 'b3974d21f59776cd6b79f32406a98ff65423f90114509746', '1', '2198902819@qq.com', '13652707149', 'http://localhostr:8080/fgfg.png', '1', '1', '2021-12-29 05:40:43', '2021-12-29 05:42:17');
 
 -- ----------------------------
+-- Table structure for user_news
+-- ----------------------------
+DROP TABLE IF EXISTS `user_news`;
+CREATE TABLE `user_news` (
+  `user_news_id` int NOT NULL AUTO_INCREMENT COMMENT '新闻收藏表自增id',
+  `user_id` int DEFAULT NULL COMMENT '用户id',
+  `news_id` int DEFAULT NULL COMMENT '新闻id',
+  `status` tinyint DEFAULT '0' COMMENT '收藏状态，0：未收藏/取消收藏  1：已收藏',
+  PRIMARY KEY (`user_news_id`),
+  KEY `user_news_user_id_IDX` (`user_id`) USING BTREE,
+  KEY `user_news_news_id_IDX` (`news_id`) USING BTREE,
+  KEY `user_news_status_IDX` (`status`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of user_news
+-- ----------------------------
+INSERT INTO `user_news` VALUES ('1', '1', '1', '1');
+INSERT INTO `user_news` VALUES ('2', '1', '2', '1');
+INSERT INTO `user_news` VALUES ('3', '1', '3', '1');
+INSERT INTO `user_news` VALUES ('4', '2', '3', '1');
+INSERT INTO `user_news` VALUES ('5', '1', '4', '1');
+
+-- ----------------------------
 -- Table structure for wish_list
 -- ----------------------------
 DROP TABLE IF EXISTS `wish_list`;
@@ -243,11 +343,21 @@ CREATE TABLE `wish_list` (
   `name` varchar(255) DEFAULT NULL COMMENT '心愿单名',
   `content` text CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '心愿单内容',
   `num` double DEFAULT NULL COMMENT '心愿的钱数',
-  `state` tinyint DEFAULT NULL COMMENT '状态，0：未完成  1: 完成',
+  `state` tinyint DEFAULT '1' COMMENT '状态，1：未完成  2: 完成',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`wish_list_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='心愿单表';
+  PRIMARY KEY (`wish_list_id`),
+  KEY `wish_list_user_id_IDX` (`user_id`) USING BTREE,
+  KEY `wish_list_name_IDX` (`name`) USING BTREE,
+  KEY `wish_list_state_IDX` (`state`) USING BTREE,
+  KEY `wish_list_create_time_IDX` (`create_time`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='心愿单表';
 
 -- ----------------------------
 -- Records of wish_list
 -- ----------------------------
+INSERT INTO `wish_list` VALUES ('1', '1', '我的月flag', '2022-01存钱目标', '15000', '1', '2022-01-05 06:34:59');
+INSERT INTO `wish_list` VALUES ('2', '1', '我的2月flag', '2022-02收入目标', '1000.66', '2', '2022-01-04 06:35:50');
+INSERT INTO `wish_list` VALUES ('3', '1', '年flag', '2022年收入打算', '250000', '1', '2022-01-04 06:36:46');
+INSERT INTO `wish_list` VALUES ('4', '1', '年flag', '2021年收入打算', '240000', '1', '2022-01-05 06:37:00');
+INSERT INTO `wish_list` VALUES ('5', '1', 'money的目标', '下一个月净收入目标！', '17800', '1', '2022-01-05 06:38:00');
+INSERT INTO `wish_list` VALUES ('6', '1', 'money目标1', '下一个月净收入目标', '17000', '1', '2022-01-05 06:40:44');
