@@ -22,4 +22,6 @@ public interface MemorandumMapper extends BaseMapper<Memorandum> {
      * @return
      */
     IPage<MemorandumVo> selectPageMemorandum(IPage<MemorandumVo> page, MemorandumVo memorandumVo);
+
+
 }

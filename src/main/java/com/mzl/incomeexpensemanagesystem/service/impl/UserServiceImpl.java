@@ -1,6 +1,9 @@
 package com.mzl.incomeexpensemanagesystem.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mzl.incomeexpensemanagesystem.entity.Announcement;
 import com.mzl.incomeexpensemanagesystem.entity.User;
 import com.mzl.incomeexpensemanagesystem.enums.RetCodeEnum;
 import com.mzl.incomeexpensemanagesystem.mapper.UserMapper;
@@ -86,9 +89,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 取得token
         String tokenHeader = request.getHeader(JwtTokenUtil.TOKEN_HEADER);
         tokenHeader = tokenHeader.replace(JwtTokenUtil.TOKEN_PREFIX, "").trim();
-        log.info(tokenHeader);
+        log.info("获取当前用户=====>" + "用户token为: " + tokenHeader);
         String userId = JwtTokenUtil.getObjectId(tokenHeader);
-        log.info("解析token得到UserId为: " + userId);
+        log.info("获取当前用户=====>" + "解析token得到UserId为: " + userId);
         return Integer.parseInt(userId);
     }
 
@@ -122,7 +125,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 //            ip = request.getRemoteAddr();
             //获取远程地址(Nginx代理), 获取nginx转发的实际ip，前端要在请求头配置X-Real-IP的请求头字段（从请求头中获取，如果是在Nginx设置的话要配置一些东西）
 //            ip = request.getHeader("X-Real-IP");
-            log.info("ip: " + ip);
+            log.info("用户注册=====>" + "ip: " + ip);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -176,7 +179,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 //            ip = request.getRemoteAddr();
             //获取远程地址(Nginx代理), 获取nginx转发的实际ip，前端要在请求头配置X-Real-IP的请求头字段（从请求头中获取，如果是在Nginx设置的话要配置一些东西）
 //            ip = request.getHeader("X-Real-IP");
-            log.info("ip: " + ip);
+            log.info("用户登录=====>" + "ip: " + ip);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -193,7 +196,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             //用户错误
             return RetResult.fail(RetCodeEnum.USERNAME_ERROR);
         }
-        //否则用户名存在，则验证密码
+        //否则用户名存在，则判断用户是否被禁用
+        if (user.getBanned() == 2){
+            //用户已被禁用
+            return RetResult.fail(RetCodeEnum.USERNAME_BANNED);
+        }
+        //否则用户名存在且未被禁用，则验证密码
         Boolean pwdTrue = MD5Util.getSaltverifyMD5(password, user.getPassword());
         if (!pwdTrue){
             //密码错误
@@ -287,7 +295,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 //            ip = request.getRemoteAddr();
             //获取远程地址(Nginx代理), 获取nginx转发的实际ip，前端要在请求头配置X-Real-IP的请求头字段（从请求头中获取，如果是在Nginx设置的话要配置一些东西）
 //            ip = request.getHeader("X-Real-IP");
-            log.info("ip: " + ip);
+            log.info("找回密码=====>" + "ip: " + ip);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -321,6 +329,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setLastLoginTime(user1.getLastLoginTime());
         userMapper.updateById(user);
         return RetResult.success();
+    }
+
+    /**
+     * 分页模糊查询用户(管理员)
+     * @param user
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public RetResult selectPageUser(User user, Integer currentPage, Integer pageSize) {
+        if (currentPage == null || currentPage == 0){
+            currentPage = 1;
+        }
+        if (pageSize == null || pageSize == 0){
+            pageSize = 10;
+        }
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like(!StringUtils.isEmpty(user.getUsername()), "username", user.getUsername());
+        queryWrapper.eq(user.getSex() != null && user.getSex() != 0, "sex", user.getSex());
+        queryWrapper.eq(user.getBanned() != null && user.getBanned() != 0, "banned", user.getBanned());
+        IPage<User> page = new Page<>(currentPage, pageSize);
+        IPage<User> userIPage = userMapper.selectPage(page, queryWrapper);
+        return RetResult.success(userIPage);
     }
 
 }

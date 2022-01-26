@@ -86,4 +86,13 @@ public interface UserService extends IService<User> {
      */
     RetResult updateUser(User user);
 
+    /**
+     * 分页模糊查询用户(管理员)
+     * @param user
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
+    RetResult selectPageUser(User user, Integer currentPage, Integer pageSize);
+
 }

@@ -65,7 +65,7 @@ public class Consumer {
     @RabbitListener(queuesToDeclare = @Queue(EMAIL_QUEUE))
 //    @RabbitListener(queuesToDeclare = {@Queue(EMAIL_QUEUE)})  //监听多个队列
     private void receiveEmail(String email){
-        log.info("接收到消费邮箱队列消息：" + email + "..." + new Date());
+        log.info("邮箱队列消费者=====>" + "接收到消费邮箱队列消息：" + email + "..." + new Date());
         //获取远程机器ip
         String ip = "";
         try {
@@ -75,7 +75,7 @@ public class Consumer {
 //            ip = request.getRemoteAddr();
             //获取远程地址(Nginx代理), 获取nginx转发的实际ip，前端要在请求头配置X-Real-IP的请求头字段（从请求头中获取，如果是在Nginx设置的话要配置一些东西）
 //            ip = request.getHeader("X-Real-IP");
-            log.info("ip: " + ip);
+            log.info("邮箱队列消费者=====>" + "ip：" +  ip);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -88,7 +88,7 @@ public class Consumer {
             new CustomException(RetCodeEnum.SEND_EMAIL_FAIL);
         }
         //存储验证码到redis,tts为3分钟
-        log.info("生成邮箱验证码：" + code);
+        log.info("邮箱队列消费者=====>" + "生成邮箱验证码：" + code);
         redisTemplate.opsForValue().set(EMAIL_CODE_KEY_PREFIX + ip, code, 180, TimeUnit.SECONDS);
     }
 
@@ -100,7 +100,7 @@ public class Consumer {
     @RabbitListener(queuesToDeclare = @Queue(PHONE_QUEUE))
 //    @RabbitListener(queuesToDeclare = {@Queue(PHONE_QUEUE)})  //监听多个队列
     private void receivePhone(String phone, Channel channel, Message message) throws IOException {
-        log.info("接收到消费电话号码队列消息：" + phone + "..." + new Date());
+        log.info("电话号码队列消费者=====>" + "接收到消费电话号码队列消息：" + phone + "..." + new Date());
         //获取远程机器ip
         String ip = "";
         try {
@@ -110,7 +110,7 @@ public class Consumer {
 //            ip = request.getRemoteAddr();
             //获取远程地址(Nginx代理), 获取nginx转发的实际ip，前端要在请求头配置X-Real-IP的请求头字段（从请求头中获取，如果是在Nginx设置的话要配置一些东西）
 //            ip = request.getHeader("X-Real-IP");
-            log.info("ip: " + ip);
+            log.info("电话号码队列消费者=====>" + "ip：" +  ip);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -123,7 +123,7 @@ public class Consumer {
         }
         //存储验证码到redis,tts为3分钟
         Integer code = SendMessageUtil.getCode();
-        log.info("生成短信验证码：" + code);
+        log.info("电话号码队列消费者=====>" + "生成短信验证码：" + code);
         redisTemplate.opsForValue().set(MESSAGE_CODE_KEY_PREFIX + ip, code, 180, TimeUnit.SECONDS);
 
     }

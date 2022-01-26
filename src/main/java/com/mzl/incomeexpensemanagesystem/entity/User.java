@@ -57,6 +57,9 @@ public class User implements Serializable {
       @ApiModelProperty(value = "是否已经删除，1：未删除  0: 已删除")
       private Boolean deleted;
 
+      @ApiModelProperty(value = "是否已经被禁用，1:未被禁用   2: 已被禁用")
+      private Integer banned;
+
       @ApiModelProperty(value = "注册时间")
       @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
       @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

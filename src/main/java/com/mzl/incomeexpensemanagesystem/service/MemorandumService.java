@@ -44,4 +44,6 @@ public interface MemorandumService extends IService<Memorandum> {
      * @return
      */
     RetResult selectPageMemorandum(MemorandumVo memorandumVo, Integer currentPage, Integer pageSize);
+
+
 }

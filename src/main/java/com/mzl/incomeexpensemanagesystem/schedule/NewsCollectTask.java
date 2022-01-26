@@ -34,7 +34,7 @@ public class NewsCollectTask extends QuartzJobBean {
      */
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        log.info("NewsCollectTask Start------" + simpleDateFormat.format(new Date()));
+        log.info("redis中的数据同步刷到数据库=====>" + "NewsCollectTask Start---" + simpleDateFormat.format(new Date()));
         //同步redis用户收藏新闻数据到数据库
         newsService.transCollectNewsFromRedisToDb();
         //同步redis新闻收藏数到数据库
@@ -44,7 +44,7 @@ public class NewsCollectTask extends QuartzJobBean {
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
-        log.info("NewsCollectTask End------" + simpleDateFormat.format(new Date()));
+        log.info("redis中的数据同步刷到数据库=====>" + "NewsCollectTask End---" + simpleDateFormat.format(new Date()));
     }
 
 }

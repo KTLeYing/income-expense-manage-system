@@ -37,6 +37,7 @@ public enum RetCodeEnum {
     OLD_PASSWORD_ERROR(218, "旧密码不正确"),
     MESSAGE_CODE_ERROR(219, "短信验证码不正确"),
     EMAIL_CODE_ERROR(220, "邮箱验证码不正确"),
+    USERNAME_BANNED(205, "用户名被禁用"),
 
     //验证码枚举
     SEND_EMAIL_FAIL(301, "邮件发送失败"),
@@ -51,6 +52,11 @@ public enum RetCodeEnum {
     //新闻模块枚举
     USER_COLLECT_NEWS(601, "用户已收藏此新闻"),
     USER_UN_COLLECTED_NEWS(602, "用户未收藏此新闻"),
+
+    //管理员枚举
+    ADMIN_ADD_SUCCESS(701, "管理员添加成功"),
+    ADMIN_ADD_FAIL(702, "管理员添加失败"),
+
     ;
 
     private Integer code;

@@ -27,4 +27,7 @@ public class MemorandumVo extends Memorandum implements Serializable {
     @ApiModelProperty(value = "记录时间 真正上传(年-月-日)")
     private String realCreateTime;
 
+    @ApiModelProperty(value = "用户名")
+    private String username;
+
 }

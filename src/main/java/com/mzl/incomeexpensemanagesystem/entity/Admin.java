@@ -29,8 +29,8 @@ public class Admin implements Serializable {
       @TableId(value = "admin_id", type = IdType.AUTO)
       private Integer adminId;
 
-      @ApiModelProperty(value = "管理员名")
-      private String name;
+      @ApiModelProperty(value = "管理员登录名")
+      private String adminName;
 
       @ApiModelProperty(value = "密码")
       private String password;

@@ -121,10 +121,9 @@ public class IERecordServiceImpl extends ServiceImpl<IERecordMapper, IERecord> i
         //获取当前用户
         Integer userId = userService.getUser().getUserId();
         ieRecordVo.setUserId(userId);
-        log.info(ieRecordVo.toString());
         IPage<IERecordVo> page = new Page<>(currentPage, pageSize);
         IPage<IERecordVo> ieCategoryIPage = ieRecordMapper.selectPageRecord(page, ieRecordVo);
-        log.info("收支类型分页结果：" + ieCategoryIPage.getRecords());
+        log.info("分页模糊查询当前用户收支记录=====>" + "收支类型分页结果：" + ieCategoryIPage.getRecords());
         return RetResult.success(ieCategoryIPage);
     }
 

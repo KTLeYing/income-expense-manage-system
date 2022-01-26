@@ -41,13 +41,13 @@ public class UserController {
         return userService.register(userVo);
     }
 
-    @PostMapping("/userLogout")
+    @GetMapping("/userLogout")
     @ApiOperation(value = "用户退出登录")
     public RetResult userLogout(HttpServletRequest request){
         return userService.userLogout(request);
     }
 
-    @PostMapping("/selectCurrentUser")
+    @GetMapping("/selectCurrentUser")
     @ApiOperation(value = "获取当前用户信息")
     public RetResult selectCurrentUser(HttpServletRequest request){
         return userService.selectCurrentUser(request);

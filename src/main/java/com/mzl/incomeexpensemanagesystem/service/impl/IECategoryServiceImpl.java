@@ -135,7 +135,7 @@ public class IECategoryServiceImpl extends ServiceImpl<IECategoryMapper, IECateg
         queryWrapper.like(!StringUtils.isEmpty(ieCategory.getSonCategory()), "son_category", ieCategory.getSonCategory());
         IPage<IECategory> page = new Page<>(currentPage, pageSize);
         IPage<IECategory> ieCategoryIPage = ieCategoryMapper.selectPage(page, queryWrapper);
-        log.info("收支类型分页结果：" + ieCategoryIPage.getRecords());
+        log.info("分页模糊查询当前用户收支类型=====>" + "收支类型分页结果：" + ieCategoryIPage.getRecords());
         return RetResult.success(ieCategoryIPage);
     }
 

@@ -38,20 +38,20 @@ public class Producer {
      * 发送邮箱消息到队列
      */
     public void sendEmailToQueue(String email){
-        log.info("邮箱生产者推送数据到发送邮箱队列..." + new Date());
+        log.info("发送邮箱消息到队列=====>" + "邮箱生产者推送数据到发送邮箱队列..." + new Date());
         // 第一个参数是email_queue队列名称
         amqpTemplate.convertAndSend(EMAIL_QUEUE, email);
-        log.info("邮箱生产者推送数据成功...");
+        log.info("发送邮箱消息到队列=====>" + "邮箱生产者推送数据成功...");
     }
 
     /**
      * 发送电话号码到消息到队列
      */
     public void sendPhoneToQueue(String phone){
-        log.info("电话号码生产者推送数据到发送邮箱队列..." + new Date());
+        log.info("发送电话号码到消息到队列=====>" + "电话号码生产者推送数据到发送邮箱队列..." + new Date());
         // 第一个参数是phone_queue队列名称
         amqpTemplate.convertAndSend(PHONE_QUEUE, phone);
-        log.info("电话号码生产者推送数据成功...");
+        log.info("发送电话号码到消息到队列=====>" + "电话号码生产者推送数据成功...");
     }
 
 }

@@ -1,5 +1,6 @@
 package com.mzl.incomeexpensemanagesystem.config;
 
+import com.mzl.incomeexpensemanagesystem.interceptor.AdminApiInterceptor;
 import com.mzl.incomeexpensemanagesystem.interceptor.ApiInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +19,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcAutoConfiguration implements WebMvcConfigurer {
 
     /**
-     * 注入beam到容器
+     * 注入用户请求拦截器bean到容器
      * @return
      */
     @Bean
@@ -26,6 +27,14 @@ public class WebMvcAutoConfiguration implements WebMvcConfigurer {
         return new ApiInterceptor();
     }
 
+    /**
+     * 注入管理员请求拦截器bean到容器
+     * @return
+     */
+    @Bean
+    public AdminApiInterceptor adminApiInterceptor(){
+        return new AdminApiInterceptor();
+    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -44,6 +53,8 @@ public class WebMvcAutoConfiguration implements WebMvcConfigurer {
                         "/**/favicon.ico",
                         "/user/userLogin",
                         "/admin/adminLogin",
+                        "/admin/**", //不拦截管理员的
+                        "/system/**",  //不拦截管理员的
                         "/user/register",
                         "/user/findBackPassword",
                         "/code/**",
@@ -52,6 +63,41 @@ public class WebMvcAutoConfiguration implements WebMvcConfigurer {
                         "/generate/**",
                         "/timbre_audition/**"
                 );
+
+        registry.addInterceptor(adminApiInterceptor())
+                .addPathPatterns("/**")
+                .excludePathPatterns(
+                        "/doc.html",
+                        "/swagger-ui.html",
+                        "/csrf",
+                        "/configuration/ui",
+                        "/swagger-resources/**",
+                        "/configuration/security",
+                        "/v2/api-docs",
+                        "/error",
+                        "/webjars/**",
+                        "/**/favicon.ico",
+                        "/user/**",  //不拦截普通用户的
+                        "/announcement/**",
+                        "/budget/**",
+                        "/iEStatistic/**",
+                        "/iECategory/**",
+                        "/iERecord/**",
+                        "/iEStatistic/**",
+                        "/memorandum/**",
+                        "/news/**",
+                        "/userNews/**",
+                        "/wishList/**",
+                        "/admin/adminLogin",
+                        "/user/register",
+                        "/user/findBackPassword",
+                        "/code/**",
+                        "/dome",
+                        "/tone",
+                        "/generate/**",
+                        "/timbre_audition/**"
+                );
+
     }
 
 
