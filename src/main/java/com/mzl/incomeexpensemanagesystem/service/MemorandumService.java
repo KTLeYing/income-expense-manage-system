@@ -37,6 +37,13 @@ public interface MemorandumService extends IService<Memorandum> {
     RetResult deleteMemorandum(Integer id);
 
     /**
+     * 批量删除备忘录
+     * @param ids
+     * @return
+     */
+    RetResult deleteBatchMemorandum(Integer[] ids);
+
+    /**
      * 分页模糊查询备忘录
      * @param memorandumVo
      * @param currentPage

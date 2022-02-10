@@ -1,18 +1,24 @@
 package com.mzl.incomeexpensemanagesystem.service.impl;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.mzl.incomeexpensemanagesystem.entity.Announcement;
 import com.mzl.incomeexpensemanagesystem.entity.User;
 import com.mzl.incomeexpensemanagesystem.enums.RetCodeEnum;
+import com.mzl.incomeexpensemanagesystem.exception.CustomException;
 import com.mzl.incomeexpensemanagesystem.mapper.UserMapper;
 import com.mzl.incomeexpensemanagesystem.response.RetResult;
 import com.mzl.incomeexpensemanagesystem.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mzl.incomeexpensemanagesystem.utils.JwtTokenUtil;
 import com.mzl.incomeexpensemanagesystem.utils.MD5Util;
+import com.mzl.incomeexpensemanagesystem.excel.vo.UserExcelVo;
+import com.mzl.incomeexpensemanagesystem.vo.UserStatisticVo;
 import com.mzl.incomeexpensemanagesystem.vo.UserVo;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -23,15 +29,16 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Objects;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static com.mzl.incomeexpensemanagesystem.utils.JwtTokenUtil.EXPIRATION_REMEMBER;
 
@@ -77,6 +84,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     private static final String EMAIL_CODE_KEY_PREFIX = "incomeExpense:emailCode:";
 
+    /**
+     * 用户今天激活数的key
+     */
+    private static final String USER_ACTIVE_TODAY_KEY = "incomeExpense:userActive:today";
+
+    /**
+     * 用户本周激活数的key
+     */
+    private static final String USER_ACTIVE_THISWEEK_KEY = "incomeExpense:userActive:thisWeek";
+
+    /**
+     * 用户历史激活数的key
+     */
+    private static final String USER_ACTIVE_HISTORY_KEY = "incomeExpense:userActive:history";
+
+    /**
+     * 每个工作表sheet存储的记录数 100W(1000000)
+     */
+    private static final Integer PER_SHEET_ROW_COUNT = 1000000;
+
+    /**
+     * 每次分页查询后向EXCEL写入的记录数(查询每页数据大小) 20W（200000）
+     */
+    private static final Integer PER_WRITE_ROW_COUNT = 200000;
 
     /**
      * 获取当前用户(根据token)
@@ -102,6 +133,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public User getUser(){
         Integer userId  = getUserId();
         User user = userMapper.selectById(userId);
+        if (user == null){
+            //当前用户为空，并抛出异常
+            throw new CustomException(RetCodeEnum.USER_NULL);
+        }
         return user;
     }
 
@@ -148,8 +183,33 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setCreateTime(now);
         user.setLastLoginTime(now);
         user.setPassword(MD5Util.getSaltMD5(user.getPassword()));
+        //默认为未禁用
+        user.setBanned(1);
+        //默认未删除
+        user.setDeleted(true);
         try {
             userMapper.insert(user);
+
+            //更新今天、本周、历史用户激活数Redis，管理员用于统计
+            //今天
+            if (!redisTemplate.hasKey(USER_ACTIVE_TODAY_KEY)){
+                redisTemplate.opsForValue().set(USER_ACTIVE_TODAY_KEY, 1);
+            }else {
+                redisTemplate.opsForValue().increment(USER_ACTIVE_TODAY_KEY, 1);
+            }
+            //本周
+            if (!redisTemplate.hasKey(USER_ACTIVE_THISWEEK_KEY)){
+                redisTemplate.opsForValue().set(USER_ACTIVE_THISWEEK_KEY, 1);
+            }else {
+                redisTemplate.opsForValue().increment(USER_ACTIVE_THISWEEK_KEY, 1);
+            }
+            //历史
+            if (!redisTemplate.hasKey(USER_ACTIVE_HISTORY_KEY)){
+                redisTemplate.opsForValue().set(USER_ACTIVE_HISTORY_KEY, 1);
+            }else {
+                redisTemplate.opsForValue().increment(USER_ACTIVE_HISTORY_KEY, 1);
+            }
+
             return RetResult.success(RetCodeEnum.REGISTER_SUCCESS);
         } catch (Exception e) {
             e.printStackTrace();
@@ -217,6 +277,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         Date now = new Date();
         user.setLastLoginTime(now);
         userMapper.updateById(user);
+
         return RetResult.success(RetCodeEnum.LOGIN_SUCCESS);
     }
 
@@ -279,7 +340,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @return
      */
     @Override
-    public RetResult findBackPassword(String newPassword, String newPassword1, String phone, String messageCode) {
+    public RetResult findBackPassword(String newPassword, String newPassword1, String userName, String messageCode) {
         //判断两次新密码是否相同
         if (!Objects.equals(newPassword, newPassword1)){
             return RetResult.fail(RetCodeEnum.TWO_NEW_PASSWORD_NOT_SAME);
@@ -309,7 +370,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String password1 = MD5Util.getSaltMD5(newPassword);
         //更新密码
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("phone", phone);
+        queryWrapper.eq("username", userName);
         User user = userMapper.selectOne(queryWrapper);
         user.setPassword(password1);
         userMapper.updateById(user);
@@ -324,9 +385,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public RetResult updateUser(User user) {
         User user1 = userMapper.selectById(user.getUserId());
+        if (user1 == null){
+            //当前用户为空，并抛出异常
+            throw new CustomException(RetCodeEnum.USER_NULL);
+        }
         user.setPassword(user1.getPassword());
         user.setCreateTime(user1.getCreateTime());
         user.setLastLoginTime(user1.getLastLoginTime());
+        user.setBanned(user1.getBanned());
+        user.setDeleted(true);
         userMapper.updateById(user);
         return RetResult.success();
     }
@@ -348,11 +415,244 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.like(!StringUtils.isEmpty(user.getUsername()), "username", user.getUsername());
+        queryWrapper.like(!StringUtils.isEmpty(user.getName()), "name", user.getName());
         queryWrapper.eq(user.getSex() != null && user.getSex() != 0, "sex", user.getSex());
         queryWrapper.eq(user.getBanned() != null && user.getBanned() != 0, "banned", user.getBanned());
         IPage<User> page = new Page<>(currentPage, pageSize);
         IPage<User> userIPage = userMapper.selectPage(page, queryWrapper);
         return RetResult.success(userIPage);
+    }
+
+    /**
+     * 添加用户(管理员)
+     * @param user
+     * @return
+     */
+    @Override
+    public RetResult addUser(User user) {
+        //加密用户密码
+        Date now = new Date();
+        user.setCreateTime(now);
+        user.setLastLoginTime(now);
+        user.setPassword(MD5Util.getSaltMD5(user.getPassword()));
+        //默认为未禁用
+        user.setBanned(1);
+        //默认未删除
+        user.setDeleted(true);
+        try {
+            userMapper.insert(user);
+            return RetResult.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return RetResult.fail();
+        }
+    }
+
+    /**
+     * 删除（注销）用户
+     * @param userId
+     * @return
+     */
+    @Override
+    public RetResult deleteUser(Integer userId) {
+        userMapper.deleteUser(userId);
+        return RetResult.success();
+    }
+
+    /**
+     * 批量删除（注销）用户
+     * @param userIds
+     * @return
+     */
+    @Override
+    public RetResult deleteBatchUser(Integer[] userIds) {
+        List<Integer> idList = Arrays.stream(userIds).collect(Collectors.toList());
+        userMapper.deleteBatchIds(idList);
+        return RetResult.success();
+    }
+
+    /**
+     * 导出所有用户信息Excel(管理员)
+     */
+    @Override
+    public void exportAllUser(HttpServletResponse response) {
+        String fileName = "all_user_data";
+        // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
+        response.setContentType("application/vnd.ms-excel");
+        response.setCharacterEncoding("utf-8");
+        // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
+
+        Integer userId = userService.getUserId();
+
+        UserExcelVo UserExcelVo = new UserExcelVo();
+        //总记录数
+        Integer totalRowCount = userMapper.selectCount(null);
+        log.info("导出所有用户信息Excel(管理员)=====>" + "总记录数：" + totalRowCount);
+        //总工作表(sheet)数
+        Integer sheetCount = totalRowCount % PER_SHEET_ROW_COUNT == 0 ? (totalRowCount / PER_SHEET_ROW_COUNT) : (totalRowCount / PER_SHEET_ROW_COUNT + 1);
+        log.info("导出所有用户信息Excel(管理员)=====>" + "总工作表(sheet)数：" + sheetCount);
+
+        ServletOutputStream out = null;
+        ExcelWriter excelWriter = null;
+
+        try {
+            out = response.getOutputStream();
+            excelWriter = EasyExcel.write(out).build();
+            WriteSheet writeSheet = null;
+            //存储总数据的list
+            List<UserExcelVo> userExcelVoList = new ArrayList<>();
+            //分页参数
+            Page<UserExcelVo> userExcelVoPage = new Page<>();
+            //设置分页参数每页大小
+            userExcelVoPage.setSize(PER_WRITE_ROW_COUNT);
+            if (sheetCount > 1){
+                //数据量大于100w
+                //每个工作表(sheet)的查询次数
+                Integer perSheetWriteCount = PER_SHEET_ROW_COUNT / PER_WRITE_ROW_COUNT;
+                //最后一个总工作表(sheet)的查询次数
+                Integer lastSheetWriteCount = totalRowCount % PER_SHEET_ROW_COUNT == 0 ?
+                        perSheetWriteCount :
+                        (totalRowCount % PER_SHEET_ROW_COUNT % PER_WRITE_ROW_COUNT == 0 ? totalRowCount % PER_SHEET_ROW_COUNT / PER_WRITE_ROW_COUNT : (totalRowCount % PER_SHEET_ROW_COUNT / PER_WRITE_ROW_COUNT + 1));
+                for (int i = 0; i < sheetCount; i++) {
+                    for (int j = 0; j < (i != sheetCount? perSheetWriteCount : lastSheetWriteCount); j++) {
+                        Integer current = j + 1 + perSheetWriteCount * i;
+                        //设置分页参数当前页数
+                        userExcelVoPage.setCurrent(current);
+                        log.info("导出所有用户信息Excel(管理员)=====>" + "当前页数：" + current);
+                        //收支记录的分页查询
+                        userExcelVoPage = userMapper.selectPageUserExcel(userExcelVoPage);
+                        log.info("导出所有用户信息Excel(管理员)=====>" + "收支记录分页数据(多个sheet)：" + userExcelVoPage);
+                        userExcelVoList = userExcelVoPage.getRecords();
+
+                        //将这个工作表结果写入excel
+                        writeSheet = EasyExcel.writerSheet(i, "收支记录" + (i + 1)).head(UserExcelVo.class).build();
+                        excelWriter.write(userExcelVoList, writeSheet);
+                        userExcelVoList.clear();
+                    }
+                }
+
+            } else {
+                //只有一个工作表(sheet)的数据
+                Integer perSheetWriteCount = PER_SHEET_ROW_COUNT / PER_WRITE_ROW_COUNT;
+                //查询次数
+                Integer writeCount = totalRowCount % PER_WRITE_ROW_COUNT == 0 ? (totalRowCount / PER_WRITE_ROW_COUNT) : (totalRowCount / PER_WRITE_ROW_COUNT + 1);
+                for (int i = 1; i <= writeCount; i++) {
+                    //设置分页参数当前页数
+                    userExcelVoPage.setCurrent(i);
+                    log.info("导出所有用户信息Excel(管理员)=====>" + "当前页数：" + i);
+                    //收支记录的分页查询
+                    userExcelVoPage = userMapper.selectPageUserExcel(userExcelVoPage);
+                    log.info("导出所有用户信息Excel(管理员)=====>" + "收支记录分页数据(1个sheet)：" + userExcelVoPage);
+                    userExcelVoList = userExcelVoPage.getRecords();
+
+                    //将这个工作表结果写入excel
+                    writeSheet = EasyExcel.writerSheet(1, "收支记录").head(UserExcelVo.class).build();
+                    excelWriter.write(userExcelVoList, writeSheet);
+                    userExcelVoList.clear();
+                }
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        } finally {
+            if (excelWriter != null) {
+                excelWriter.finish();
+            }
+        }
+    }
+
+    /**
+     * 统计今天、本周、历史用户激活数(管理员)
+     * @return
+     */
+    @Override
+    public RetResult statisticUserActive() {
+        HashMap<String, Object> statisticResult = new HashMap<>();
+        Integer todayActive = (Integer) redisTemplate.opsForValue().get(USER_ACTIVE_TODAY_KEY);
+        Integer thisWeekActive = (Integer) redisTemplate.opsForValue().get(USER_ACTIVE_THISWEEK_KEY);
+        Integer historyActive = (Integer) redisTemplate.opsForValue().get(USER_ACTIVE_HISTORY_KEY);
+        log.info("统计今天、本周、历史用户激活数(管理员)=====>" + "统计结果:" + todayActive + "——" + thisWeekActive + "——" + historyActive);
+        statisticResult.put("todayActive", todayActive);
+        statisticResult.put("thisWeekActive", thisWeekActive);
+        statisticResult.put("historyActive", historyActive);
+        return RetResult.success(statisticResult);
+    }
+
+    /**
+     * 近10年用户激活数对比(管理员)
+     * @return
+     */
+    @Override
+    public RetResult tenYearUserActive() {
+        Date now = new Date();
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy");
+        //创建日历对象
+        Calendar cal = Calendar.getInstance();
+        //将时间日期数据传入日历对象
+        cal.setTime(now);
+        //设置月份加10年 【年、月、日相加操作均类似】
+        cal.add(Calendar.YEAR, -10);
+        Date now1 = cal.getTime();
+        String fromYear = sf.format(now1);
+        String toYear = sf.format(now);
+        List<UserStatisticVo> userActiveList = userMapper.tenYearUserActive(fromYear, toYear);
+        return RetResult.success(userActiveList);
+    }
+
+    /**
+     * 反馈活跃的前10用户(管理员)
+     * @return
+     */
+    @Override
+    public RetResult tenFeedbackUser() {
+        List<UserStatisticVo> userPostList = userMapper.tenFeedbackUser();
+        return RetResult.success(userPostList);
+    }
+
+    /**
+     * 禁用用户(管理员)
+     * @param userId
+     * @return
+     */
+    @Override
+    public RetResult banUser(Integer userId) {
+        userMapper.banUser(userId);
+        return RetResult.success();
+    }
+
+    /**
+     * 批量禁用用户(管理员)
+     * @param userIds
+     * @return
+     */
+    @Override
+    public RetResult banBatchUser(Integer[] userIds) {
+        List<Integer> userIdsList = Arrays.stream(userIds).collect(Collectors.toList());
+        userMapper.banBatchUser(userIdsList);
+        return RetResult.success();
+    }
+
+    /**
+     * 解禁用户(管理员)
+     * @param userId
+     * @return
+     */
+    @Override
+    public RetResult unBanUser(Integer userId) {
+        userMapper.unBanUser(userId);
+        return RetResult.success();
+    }
+
+    /**
+     * 批量解禁用户(管理员)
+     * @param userIds
+     * @return
+     */
+    @Override
+    public RetResult unBanBatchUser(Integer[] userIds) {
+        List<Integer> userIdsList = Arrays.stream(userIds).collect(Collectors.toList());
+        userMapper.unBanBatchUser(userIdsList);
+        return RetResult.success();
     }
 
 }

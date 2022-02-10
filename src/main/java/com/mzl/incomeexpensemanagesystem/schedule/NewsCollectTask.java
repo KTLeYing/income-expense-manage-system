@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @ClassName :   ScheduleJob
- * @Description: 定时任务（这里使用动态定时任务框架Quartz）
+ * @Description: 新闻收藏数据库-redis同步定时任务（这里使用动态定时任务框架Quartz）
  * @Author: v_ktlema
  * @CreateDate: 2022/1/6 11:10
  * @Version: 1.0

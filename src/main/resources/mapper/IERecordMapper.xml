@@ -31,28 +31,28 @@
     </select>
 
     <!--统计近10年的收支-->
-    <select id="statisticTenYear" resultType="com.mzl.incomeexpensemanagesystem.vo.StatisticVo">
+    <select id="statisticTenYear" resultType="com.mzl.incomeexpensemanagesystem.vo.IEStatisticVo">
         select DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y') as year, sum(r.num) as num from i_e_record r, i_e_category c
         where c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y') between #{leastYear} and #{year}
         and c.parent_category = #{parentCategory} group by DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y')
     </select>
 
     <!--按年统计每月的收入-->
-    <select id="statisticByYear" resultType="com.mzl.incomeexpensemanagesystem.vo.StatisticVo">
+    <select id="statisticByYear" resultType="com.mzl.incomeexpensemanagesystem.vo.IEStatisticVo">
         select DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%m') as month, sum(r.num) as num from i_e_record r, i_e_category c
         where c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y') = #{year}
         and c.parent_category = #{parentCategory} group by DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%m')
     </select>
 
     <!--根据年-月份统计收支各子类-->
-    <select id="statisticSonCategory" resultType="com.mzl.incomeexpensemanagesystem.vo.StatisticVo">
+    <select id="statisticSonCategory" resultType="com.mzl.incomeexpensemanagesystem.vo.IEStatisticVo">
         select t1.sonCategory, t1.num as num, round(t1.num/t2.num, 2) as sonCategoryPercent from (select c.son_category as sonCategory, sum(r.num) as num from i_e_record r, i_e_category c where c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y-%m') = #{time}
         and c.parent_category = #{parentCategory} group by sonCategory) t1, (select sum(r.num) as num  from i_e_record r, i_e_category c WHERE c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y-%m') = #{time}
         and c.parent_category = #{parentCategory}) t2
     </select>
 
     <!--根据自定义时间段统计收支各子类-->
-    <select id="statisticByPeriod" resultType="com.mzl.incomeexpensemanagesystem.vo.StatisticVo">
+    <select id="statisticByPeriod" resultType="com.mzl.incomeexpensemanagesystem.vo.IEStatisticVo">
         select c.son_category as sonCategory, sum(r.num) as num from i_e_record r, i_e_category c where c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y-%m-%d') between #{fromTime} and #{toTime}
         and c.parent_category = #{parentCategory} group by sonCategory
     </select>
@@ -104,17 +104,55 @@
     </select>
 
     <!--查询月(年-月)收支排行榜Top10-->
-    <select id="monthRank" resultType="com.mzl.incomeexpensemanagesystem.vo.StatisticVo">
+    <select id="monthRank" resultType="com.mzl.incomeexpensemanagesystem.vo.IEStatisticVo">
         select t1.sonCategory, t1.num as num, round(t1.num/t2.num, 2) as sonCategoryPercent from (select c.son_category as sonCategory, sum(r.num) as num from i_e_record r, i_e_category c where c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y-%m') = #{yearMonth}
         and c.parent_category = #{parentCategory} group by sonCategory) t1, (select sum(r.num) as num  from i_e_record r, i_e_category c WHERE c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y-%m') = #{yearMonth}
         and c.parent_category = #{parentCategory}) t2 order by num desc limit 0, 10
     </select>
 
     <!--查询年收支排行榜Top10-->
-    <select id="yearRank" resultType="com.mzl.incomeexpensemanagesystem.vo.StatisticVo">
+    <select id="yearRank" resultType="com.mzl.incomeexpensemanagesystem.vo.IEStatisticVo">
         select t1.sonCategory, t1.num as num, round(t1.num/t2.num, 2) as sonCategoryPercent from (select c.son_category as sonCategory, sum(r.num) as num from i_e_record r, i_e_category c where c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y') = #{year}
         and c.parent_category = #{parentCategory} group by sonCategory) t1, (select sum(r.num) as num  from i_e_record r, i_e_category c WHERE c.i_e_category_id = r.i_e_category_id and r.user_id = #{userId} and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y') = #{year}
         and c.parent_category = #{parentCategory}) t2 order by num desc limit 0, 10
+    </select>
+
+    <!--分页模糊查询收支记录(管理员)-->
+    <select id="selectPageRecordAD" resultType="com.mzl.incomeexpensemanagesystem.vo.IERecordVo">
+        select u.username, r.*, c.parent_category, c.son_category from i_e_record r, i_e_category c, user u
+        <where>
+            r.i_e_category_id = c.i_e_category_id and r.user_id  = u.user_id and u.deleted = 1
+            <if test="ieRecordVo.username != '' and ieRecordVo.username != null">
+                and u.username like '%${ieRecordVo.username}%'
+            </if>
+            <if test="ieRecordVo.banned != 0 and ieRecordVo.banned != null">
+                and u.banned = #{ieRecordVo.banned}
+            </if>
+            <if test="ieRecordVo.note != '' and ieRecordVo.note != null">
+                and r.note like '%${ieRecordVo.note}%'
+            </if>
+            <if test="ieRecordVo.parentCategory != '' and ieRecordVo.parentCategory != null">
+                and c.parent_category like '%${ieRecordVo.parentCategory}%'
+            </if>
+            <if test="ieRecordVo.realCreateTime != '' and ieRecordVo.realCreateTime != null">
+                and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y-%m-%d') = #{ieRecordVo.realCreateTime}
+            </if>
+            <if test="ieRecordVo.realCreateTimeTwo != '' and ieRecordVo.realCreateTimeTwo != null">
+                and DATE_FORMAT(DATE_ADD(r.create_time, INTERVAL 8 hour), '%Y-%m') = #{ieRecordVo.realCreateTimeTwo}
+            </if>
+        </where>
+    </select>
+
+    <!--导出收支记录excel的分页查询-->
+    <select id="selectPageRecordExcel" resultType="com.mzl.incomeexpensemanagesystem.excel.vo.IERecordExcelVo">
+        select r.*, c.parent_category, c.son_category from i_e_record r, i_e_category c
+        where r.i_e_category_id = c.i_e_category_id and r.user_id = #{userId}
+    </select>
+
+    <!--导出所有用户收支记录Excel(管理员)-->
+    <select id="selectPageRecordExcelAD" resultType="com.mzl.incomeexpensemanagesystem.excel.vo.IERecordExcelADVo">
+        select u.username, r.*, c.parent_category, c.son_category from i_e_record r, i_e_category c, user u
+        where r.i_e_category_id = c.i_e_category_id and r.user_id = u.user_id and u.deleted = 1
     </select>
 
 

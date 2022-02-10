@@ -3,9 +3,11 @@ package com.mzl.incomeexpensemanagesystem.service;
 import com.mzl.incomeexpensemanagesystem.entity.IECategory;
 import com.mzl.incomeexpensemanagesystem.entity.IERecord;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mzl.incomeexpensemanagesystem.entity.News;
 import com.mzl.incomeexpensemanagesystem.response.RetResult;
 import com.mzl.incomeexpensemanagesystem.vo.IERecordVo;
 
+import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 
 /**
@@ -110,4 +112,39 @@ public interface IERecordService extends IService<IERecord> {
      */
     RetResult analysisByYear(String year) throws ParseException;
 
+    /**
+     * 分页模糊查询收支记录(管理员)
+     * @param ieRecordVo
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
+    RetResult selectPageRecordAD(IERecordVo ieRecordVo, Integer currentPage, Integer pageSize);
+
+    /**
+     * 添加收支记录(管理员)
+     * @param ieRecord
+     * @return
+     */
+    RetResult addRecordAD(IERecord ieRecord);
+
+    /**
+     * 修改收支记录(管理员)
+     * @param ieRecord
+     * @return
+     */
+    RetResult updateRecordAD(IERecord ieRecord);
+
+    /**
+     * 导出当前用户所有收支记录
+     * @param response
+     */
+    void exportAllRecord(HttpServletResponse response);
+
+    /**
+     * 导出所有用户收支记录Excel(管理员)
+     * @param response
+     * @return
+     */
+    void exportAllRecordAD(HttpServletResponse response);
 }

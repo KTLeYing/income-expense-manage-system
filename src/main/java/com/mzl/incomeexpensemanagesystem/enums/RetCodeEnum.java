@@ -38,6 +38,7 @@ public enum RetCodeEnum {
     MESSAGE_CODE_ERROR(219, "短信验证码不正确"),
     EMAIL_CODE_ERROR(220, "邮箱验证码不正确"),
     USERNAME_BANNED(205, "用户名被禁用"),
+    USER_NULL(206, "用户不存在"),
 
     //验证码枚举
     SEND_EMAIL_FAIL(301, "邮件发送失败"),

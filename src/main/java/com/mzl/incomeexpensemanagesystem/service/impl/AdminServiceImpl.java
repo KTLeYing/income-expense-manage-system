@@ -139,7 +139,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         //生成用户token并存储
         String token = JwtTokenUtil.createToken(String.valueOf(admin.getAdminId()), admin.getAdminName(), true);
         //设置key的过期时间为一天
-        redisTemplate.opsForValue().set(TOKEN_KEY_PREFIX +admin.getAdminId(), token, EXPIRATION_REMEMBER, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(TOKEN_KEY_PREFIX + admin.getAdminId(), token, EXPIRATION_REMEMBER, TimeUnit.SECONDS);
         //把token返回给前端的Header
         response.setHeader(JwtTokenUtil.TOKEN_HEADER, JwtTokenUtil.TOKEN_PREFIX + token);
         return RetResult.success(RetCodeEnum.LOGIN_SUCCESS);
@@ -197,7 +197,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
      * @return
      */
     @Override
-    public RetResult findBackPassword(String newPassword, String newPassword1, String phone, String messageCode) {
+    public RetResult findBackPassword(String newPassword, String newPassword1, String adminName, String messageCode) {
         //判断两次新密码是否相同
         if (!Objects.equals(newPassword, newPassword1)){
             return RetResult.fail(RetCodeEnum.TWO_NEW_PASSWORD_NOT_SAME);
@@ -227,7 +227,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         String password1 = MD5Util.getSaltMD5(newPassword);
         //更新密码
         QueryWrapper<Admin> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("phone", phone);
+        queryWrapper.eq("admin_name", adminName);
         Admin admin = adminMapper.selectOne(queryWrapper);
         admin.setPassword(password1);
         adminMapper.updateById(admin);

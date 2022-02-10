@@ -3,8 +3,61 @@
 <mapper namespace="com.mzl.incomeexpensemanagesystem.mapper.UserMapper">
 
                     <!-- 通用查询结果列 -->
-        <sql id="Base_Column_List">
+    <sql id="Base_Column_List">
         user_id, username, password, sex, email, phone, avatar_path, deleted
     </sql>
 
-    </mapper>
+    <!--删除用户-->
+    <delete id="deleteUser">
+        update user set deleted = 0 where user_id = #{userId}
+    </delete>
+    
+    <!--导出所有用户信息Excel(管理员)-->
+    <select id="selectPageUserExcel" resultType="com.mzl.incomeexpensemanagesystem.excel.vo.UserExcelVo">
+        select * from user
+    </select>
+
+    <!--近10年用户激活数对比(管理员)-->
+    <select id="tenYearUserActive" resultType="com.mzl.incomeexpensemanagesystem.vo.UserStatisticVo">
+        select DATE_FORMAT(create_time, '%Y') as year, count(1) as activeNum from user where DATE_FORMAT(create_time, '%Y') between #{fromYear} and #{toYear} group by year
+    </select>
+
+    <!--反馈活跃的前10用户(管理员)-->
+    <select id="tenFeedbackUser" resultType="com.mzl.incomeexpensemanagesystem.vo.UserStatisticVo">
+        select u.username, count(1) as postNum from user u, feedback f
+        where u.user_id = f.user_id and u.deleted = 1 group by u.user_id order by postNum desc limit 0, 10
+    </select>
+
+    <!--禁用用户(管理员)-->
+    <update id="banUser">
+        update user set banned = 2 where user_id = #{userId}
+    </update>
+
+    <!--批量禁用用户(管理员)-->
+    <update id="banBatchUser">
+        update user set banned = 2
+        <where>
+            user_id in
+            <foreach collection="list" open="(" close=")" separator="," item="userId">
+              #{userId}
+            </foreach>
+        </where>
+    </update>
+
+    <!--解禁用户(管理员)-->
+    <update id="unBanUser">
+        update user set banned = 1 where user_id = #{userId}
+    </update>
+
+    <!--批量解禁用户(管理员)-->
+    <update id="unBanBatchUser">
+        update user set banned = 1
+        <where>
+            user_id in
+            <foreach collection="list" open="(" close=")" separator="," item="userId">
+                #{userId}
+            </foreach>
+        </where>
+    </update>
+
+</mapper>

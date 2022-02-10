@@ -14,7 +14,10 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -72,6 +75,18 @@ public class WishListServiceImpl extends ServiceImpl<WishListMapper, WishList> i
     }
 
     /**
+     * 批量删除心愿单
+     * @param ids
+     * @return
+     */
+    @Override
+    public RetResult deleteBatchWish(Integer[] ids) {
+        List<Integer> idList = Arrays.stream(ids).collect(Collectors.toList());
+        wishListMapper.deleteBatchIds(idList);
+        return RetResult.success();
+    }
+
+    /**
      * 分页模糊查询心愿单
      * @param wishListVo
      * @param currentPage
@@ -92,6 +107,5 @@ public class WishListServiceImpl extends ServiceImpl<WishListMapper, WishList> i
         IPage<WishListVo> wishListPage = wishListMapper.selectPageWish(page, wishListVo);
         return RetResult.success(wishListPage);
     }
-
 
 }

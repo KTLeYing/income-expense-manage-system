@@ -53,11 +53,14 @@ public class WebMvcAutoConfiguration implements WebMvcConfigurer {
                         "/**/favicon.ico",
                         "/user/userLogin",
                         "/admin/adminLogin",
-                        "/admin/**", //不拦截管理员的
-                        "/system/**",  //不拦截管理员的
+                        "/admin/**", //不拦截管理员的请求
+                        "/system/**",  //不拦截管理员系统的请求
                         "/user/register",
                         "/user/findBackPassword",
                         "/code/**",
+                        "/actuator/**",  //放行所有actuator系统监控请求
+                        "/assets/**",
+                        "/applications/**",
                         "/dome",
                         "/tone",
                         "/generate/**",
@@ -77,7 +80,7 @@ public class WebMvcAutoConfiguration implements WebMvcConfigurer {
                         "/error",
                         "/webjars/**",
                         "/**/favicon.ico",
-                        "/user/**",  //不拦截普通用户的
+                        "/user/**",  //不拦截普通用户的请求
                         "/announcement/**",
                         "/budget/**",
                         "/iEStatistic/**",
@@ -88,10 +91,14 @@ public class WebMvcAutoConfiguration implements WebMvcConfigurer {
                         "/news/**",
                         "/userNews/**",
                         "/wishList/**",
+                        "/feedback/**",
                         "/admin/adminLogin",
                         "/user/register",
                         "/user/findBackPassword",
                         "/code/**",
+                        "/actuator/**",  //放行所有actuator系统监控请求
+                        "/assets/**",
+                        "/applications/**",
                         "/dome",
                         "/tone",
                         "/generate/**",

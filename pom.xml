@@ -231,6 +231,42 @@
             <artifactId>spring-boot-starter-quartz</artifactId>
         </dependency>
 
+        <!--EasyExcel-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+
+        <!--Spring Boot Actuator系统性能监控-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <!--Spring Boot Actuator系统性能监控可视化界面-->
+        <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-server</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <!--系统性能监控可视化界面的客户端-->
+        <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-client</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <!-- Spring Boot Actuator对外暴露引用的监控信息, Jolokia提供使用HTTP接口获取json -->
+        <dependency>
+            <groupId>org.jolokia</groupId>
+            <artifactId>jolokia-core</artifactId>
+        </dependency>
+        <!-- 服务包引用1.1.1版本, maven仓库已经不支持下载, 手动引入1.1版本 -->
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>

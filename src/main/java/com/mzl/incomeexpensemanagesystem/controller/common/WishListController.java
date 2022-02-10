@@ -46,6 +46,12 @@ public class WishListController {
         return wishListService.deleteWish(id);
     }
 
+    @GetMapping("/deleteBatchWish")
+    @ApiOperation(value = "批量删除心愿单")
+    public RetResult deleteBatchWish(Integer[] ids){
+        return wishListService.deleteBatchWish(ids);
+    }
+
     @GetMapping("/selectPageWish")
     @ApiOperation(value = "分页模糊查询心愿单")
     public RetResult selectPageWish(WishListVo wishListVo, Integer currentPage, Integer pageSize){

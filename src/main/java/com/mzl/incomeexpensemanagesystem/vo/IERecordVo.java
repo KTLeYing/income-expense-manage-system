@@ -41,4 +41,10 @@ public class IERecordVo extends IERecord implements Serializable {
     @ApiModelProperty(value = "记录时间 真正上传(年-月)")
     private String realCreateTimeTwo;
 
+    @ApiModelProperty(value = "用户名")
+    private String username;
+
+    @ApiModelProperty(value = "是否已经被禁用，1:未被禁用   2: 已被禁用")
+    private Integer banned;
+
 }

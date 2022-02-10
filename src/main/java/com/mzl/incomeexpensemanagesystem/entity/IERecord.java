@@ -30,10 +30,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 @ApiModel(value="IERecord对象", description="收支记录表")
 public class IERecord implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+     private static final long serialVersionUID = 1L;
 
       @ApiModelProperty(value = "收支记录自增id")
-        @TableId(value = "i_e_record_id", type = IdType.AUTO)
+      @TableId(value = "i_e_record_id", type = IdType.AUTO)
       private Integer iERecordId;
 
       @ApiModelProperty(value = "用户id")

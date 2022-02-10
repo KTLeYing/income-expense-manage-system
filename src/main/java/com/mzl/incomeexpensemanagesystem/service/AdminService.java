@@ -64,11 +64,11 @@ public interface AdminService extends IService<Admin> {
      * 找回密码
      * @param newPassword
      * @param newPassword1
-     * @param phone
+     * @param adminName
      * @param messageCode
      * @return
      */
-    RetResult findBackPassword(String newPassword, String newPassword1, String phone, String messageCode);
+    RetResult findBackPassword(String newPassword, String newPassword1, String adminName, String messageCode);
 
     /**
      * 管理员退出登录

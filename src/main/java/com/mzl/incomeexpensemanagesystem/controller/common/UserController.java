@@ -61,14 +61,20 @@ public class UserController {
 
     @PostMapping("/findBackPassword")
     @ApiOperation(value = "找回密码")
-    public RetResult findBackPassword(String newPassword, String newPassword1, String phone, String messageCode){
-        return userService.findBackPassword(newPassword, newPassword1, phone, messageCode);
+    public RetResult findBackPassword(String newPassword, String newPassword1, String userName, String messageCode){
+        return userService.findBackPassword(newPassword, newPassword1, userName, messageCode);
     }
 
     @PostMapping("/updateUser")
     @ApiOperation(value = "修改用户信息")
     public RetResult updateUser(@RequestBody User user){
         return userService.updateUser(user);
+    }
+
+    @GetMapping("/deleteUser")
+    @ApiOperation(value = "注销(删除)用户")
+    public RetResult deleteUser(Integer userId){
+        return userService.deleteUser(userId);
     }
 
 }

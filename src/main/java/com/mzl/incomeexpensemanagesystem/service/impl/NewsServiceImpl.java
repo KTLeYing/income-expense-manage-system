@@ -3,6 +3,7 @@ package com.mzl.incomeexpensemanagesystem.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mzl.incomeexpensemanagesystem.entity.Announcement;
 import com.mzl.incomeexpensemanagesystem.entity.News;
 import com.mzl.incomeexpensemanagesystem.entity.UserNews;
 import com.mzl.incomeexpensemanagesystem.enums.CollectStatusEnum;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -292,6 +294,55 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
             return RetResult.success(RetCodeEnum.USER_COLLECT_NEWS);
         }
         return RetResult.success(RetCodeEnum.USER_UN_COLLECTED_NEWS);
+    }
+
+    /**
+     * 添加新闻(管理员)
+     * @param news
+     * @return
+     */
+    @Override
+    public RetResult addNews(News news) {
+        Date now = new Date();
+        news.setCreateTime(now);
+        newsMapper.insert(news);
+        return RetResult.success();
+    }
+
+    /**
+     * 修改新闻(管理员)
+     * @param news
+     * @return
+     */
+    @Override
+    public RetResult updateNews(News news) {
+        News news1 = newsMapper.selectById(news.getNewsId());
+        news.setCreateTime(news1.getCreateTime());
+        newsMapper.updateById(news);
+        return RetResult.success();
+    }
+
+    /**
+     * 删除新闻(管理员)
+     * @param id
+     * @return
+     */
+    @Override
+    public RetResult deleteNews(Integer id) {
+        newsMapper.deleteById(id);
+        return RetResult.success();
+    }
+
+    /**
+     * 批量删除新闻(管理员)
+     * @param ids
+     * @return
+     */
+    @Override
+    public RetResult deleteBatchNews(Integer[] ids) {
+        List<Integer> idsList = Arrays.stream(ids).collect(Collectors.toList());
+        newsMapper.deleteBatchIds(idsList);
+        return RetResult.success();
     }
 
     /**

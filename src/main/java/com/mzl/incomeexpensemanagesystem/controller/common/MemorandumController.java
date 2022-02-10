@@ -13,6 +13,10 @@ import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * <p>
  * 备忘录表 前端控制器
@@ -45,6 +49,12 @@ public class MemorandumController {
     @ApiOperation(value = "删除备忘录")
     public RetResult deleteMemorandum(Integer id){
         return memorandumService.deleteMemorandum(id);
+    }
+
+    @GetMapping("/deleteBatchMemorandum")
+    @ApiOperation(value = "批量删除备忘录")
+    public RetResult deleteBatchMemorandum(Integer[] ids){
+        return memorandumService.deleteBatchMemorandum(ids);
     }
 
     @GetMapping("/selectPageMemorandum")

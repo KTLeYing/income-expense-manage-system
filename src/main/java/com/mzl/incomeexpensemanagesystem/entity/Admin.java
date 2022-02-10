@@ -35,6 +35,9 @@ public class Admin implements Serializable {
       @ApiModelProperty(value = "密码")
       private String password;
 
+      @ApiModelProperty(value = "手机号")
+      private String phone;
+
       @ApiModelProperty(value = "头像路径")
       private String avatarPath;
 

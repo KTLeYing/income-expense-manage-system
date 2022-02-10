@@ -12,7 +12,10 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -64,6 +67,55 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
     public RetResult selectNewAnnouncement() {
         List<Announcement> announcementList = announcementMapper.selectNewAnnouncement();
         return RetResult.success(announcementList);
+    }
+
+    /**
+     * 添加公告(管理员)
+     * @param announcement
+     * @return
+     */
+    @Override
+    public RetResult addAnnouncement(Announcement announcement) {
+        Date now = new Date();
+        announcement.setCreateTime(now);
+        announcementMapper.insert(announcement);
+        return RetResult.success();
+    }
+
+    /**
+     * 修改公告(管理员)
+     * @param announcement
+     * @return
+     */
+    @Override
+    public RetResult updateAnnouncement(Announcement announcement) {
+        Announcement announcement1 = announcementMapper.selectById(announcement.getAnnouncementId());
+        announcement.setCreateTime(announcement1.getCreateTime());
+        announcementMapper.updateById(announcement);
+        return RetResult.success();
+    }
+
+    /**
+     * 删除公告(管理员)
+     * @param id
+     * @return
+     */
+    @Override
+    public RetResult deleteAnnouncement(Integer id) {
+        announcementMapper.deleteById(id);
+        return RetResult.success();
+    }
+
+    /**
+     * 批量删除(管理公告员
+     * @param ids
+     * @return
+     */
+    @Override
+    public RetResult deleteBatchAnnouncement(Integer[] ids) {
+        List<Integer> idsList = Arrays.stream(ids).collect(Collectors.toList());
+        announcementMapper.deleteBatchIds(idsList);
+        return RetResult.success();
     }
 
 }

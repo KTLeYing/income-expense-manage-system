@@ -30,11 +30,18 @@ public interface WishListService extends IService<WishList> {
     RetResult updateWish(WishList wishList);
 
     /**
-     * deleteWish
+     * 删除心愿单
      * @param id
      * @return
      */
     RetResult deleteWish(Integer id);
+
+    /**
+     * 批量删除心愿单
+     * @param ids
+     * @return
+     */
+    RetResult deleteBatchWish(Integer[] ids);
 
     /**
      * 分页模糊查询心愿单
@@ -44,4 +51,5 @@ public interface WishListService extends IService<WishList> {
      * @return
      */
     RetResult selectPageWish(WishListVo wishListVo, Integer currentPage, Integer pageSize);
+
 }

@@ -58,7 +58,7 @@ public class IECategoryServiceImpl extends ServiceImpl<IECategoryMapper, IECateg
         if (ieCategory1 != null){
             return RetResult.fail(RetCodeEnum.SON_CATEGORY_EXISTS);
         }
-        ieCategory.setUserId(userService.getUser().getUserId());
+        ieCategory.setUserId(userService.getUserId());
         ieCategoryMapper.insert(ieCategory);
         return RetResult.success();
     }
@@ -89,7 +89,7 @@ public class IECategoryServiceImpl extends ServiceImpl<IECategoryMapper, IECateg
         if (ieCategory1 != null){
             return RetResult.fail(RetCodeEnum.SON_CATEGORY_EXISTS);
         }
-        ieCategory.setUserId(userService.getUser().getUserId());
+        ieCategory.setUserId(userService.getUserId());
         ieCategoryMapper.updateById(ieCategory);
         return RetResult.success();
     }
@@ -103,7 +103,7 @@ public class IECategoryServiceImpl extends ServiceImpl<IECategoryMapper, IECateg
     public RetResult selectAllCategory() {
         QueryWrapper<IECategory> queryWrapper = new QueryWrapper<>();
         //获取当前用户
-        Integer userId = userService.getUser().getUserId();
+        Integer userId = userService.getUserId();
         queryWrapper.eq("user_id", userId);
         List<IECategory> categoryList = ieCategoryMapper.selectList(queryWrapper);
         return RetResult.success(categoryList);
@@ -128,7 +128,7 @@ public class IECategoryServiceImpl extends ServiceImpl<IECategoryMapper, IECateg
         }
         QueryWrapper<IECategory> queryWrapper = new QueryWrapper<>();
         //获取当前用户
-        Integer userId = userService.getUser().getUserId();
+        Integer userId = userService.getUserId();
         queryWrapper.eq("user_id", userId);
         //QueryWrapper条件构造器从上到下执行，如果后面有条件时 且 没自己没设置其他拼接函数时，默认以 and 来链接（除非自己设置了and、or等拼接函数），不调用or则默认为使用 and 连
         queryWrapper.like(!StringUtils.isEmpty(ieCategory.getParentCategory()), "parent_category", ieCategory.getParentCategory());

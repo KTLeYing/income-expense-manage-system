@@ -6,6 +6,7 @@ import com.mzl.incomeexpensemanagesystem.service.AdminService;
 import com.mzl.incomeexpensemanagesystem.service.UserService;
 import com.mzl.incomeexpensemanagesystem.service.impl.UserServiceImpl;
 import com.mzl.incomeexpensemanagesystem.utils.JwtTokenUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -23,6 +24,7 @@ import java.util.concurrent.TimeUnit;
  * @CreateDate: 2021/12/24 10:13
  * @Version: 1.0
  */
+@Slf4j
 public class AdminApiInterceptor implements HandlerInterceptor {
 
     @Autowired
@@ -38,10 +40,10 @@ public class AdminApiInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        System.out.println(request.getRequestURI());
+        log.info("管理员请求拦截器=====>" + "拦截路径:" + request.getRequestURI());
         //获取用户的token
         String token = request.getHeader(JwtTokenUtil.TOKEN_HEADER);
-        System.out.println(token);
+        log.info("管理员请求拦截器=====>" + "用户token:" + token);
         //如果token为空或token前缀不对，则访问失败
         if (StringUtils.isEmpty(token) || !token.startsWith(JwtTokenUtil.TOKEN_PREFIX)){
             throw new CustomException(RetCodeEnum.TOKEN_ERROR);

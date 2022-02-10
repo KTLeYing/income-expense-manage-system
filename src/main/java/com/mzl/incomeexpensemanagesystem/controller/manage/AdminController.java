@@ -56,8 +56,8 @@ public class AdminController {
 
     @PostMapping("/findBackPassword")
     @ApiOperation(value = "找回管理员密码")
-    public RetResult findBackPassword(String newPassword, String newPassword1, String phone, String messageCode){
-        return adminService.findBackPassword(newPassword, newPassword1, phone, messageCode);
+    public RetResult findBackPassword(String newPassword, String newPassword1, String adminName, String messageCode){
+        return adminService.findBackPassword(newPassword, newPassword1, adminName, messageCode);
     }
 
     @GetMapping("/adminLogout")

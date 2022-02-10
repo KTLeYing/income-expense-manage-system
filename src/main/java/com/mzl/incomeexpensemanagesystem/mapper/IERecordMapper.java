@@ -2,15 +2,15 @@ package com.mzl.incomeexpensemanagesystem.mapper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.mzl.incomeexpensemanagesystem.entity.IECategory;
 import com.mzl.incomeexpensemanagesystem.entity.IERecord;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.mzl.incomeexpensemanagesystem.excel.vo.IERecordExcelADVo;
 import com.mzl.incomeexpensemanagesystem.vo.AnalysisVo;
+import com.mzl.incomeexpensemanagesystem.excel.vo.IERecordExcelVo;
 import com.mzl.incomeexpensemanagesystem.vo.IERecordVo;
-import com.mzl.incomeexpensemanagesystem.vo.StatisticVo;
+import com.mzl.incomeexpensemanagesystem.vo.IEStatisticVo;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -36,7 +36,7 @@ public interface IERecordMapper extends BaseMapper<IERecord> {
      * @param parentCategory
      * @return
      */
-    List<StatisticVo> statisticByYear(String year, String parentCategory, Integer userId);
+    List<IEStatisticVo> statisticByYear(String year, String parentCategory, Integer userId);
 
     /**
      * 根据年-月份统计收支各子类
@@ -44,7 +44,7 @@ public interface IERecordMapper extends BaseMapper<IERecord> {
      * @param parentCategory
      * @return
      */
-    List<StatisticVo> statisticSonCategory(String time, String parentCategory, Integer userId);
+    List<IEStatisticVo> statisticSonCategory(String time, String parentCategory, Integer userId);
 
     /**
      * 统计近10年的收支
@@ -54,7 +54,7 @@ public interface IERecordMapper extends BaseMapper<IERecord> {
      * @param userId
      * @return
      */
-    List<StatisticVo> statisticTenYear(Integer year, Integer leastYear, String parentCategory, Integer userId);
+    List<IEStatisticVo> statisticTenYear(Integer year, Integer leastYear, String parentCategory, Integer userId);
 
     /**
      * 根据自定义时间段统计收支各子类
@@ -64,7 +64,7 @@ public interface IERecordMapper extends BaseMapper<IERecord> {
      * @param userId
      * @return
      */
-    List<StatisticVo> statisticByPeriod(String fromTime, String toTime, String parentCategory, Integer userId);
+    List<IEStatisticVo> statisticByPeriod(String fromTime, String toTime, String parentCategory, Integer userId);
 
     /**
      * 统计今天收支
@@ -135,7 +135,7 @@ public interface IERecordMapper extends BaseMapper<IERecord> {
      * @param yearMonth
      * @return
      */
-    List<StatisticVo> monthRank(String parentCategory, Integer userId, String yearMonth);
+    List<IEStatisticVo> monthRank(String parentCategory, Integer userId, String yearMonth);
 
     /**
      * 查询年收支排行榜Top10
@@ -144,5 +144,28 @@ public interface IERecordMapper extends BaseMapper<IERecord> {
      * @param year
      * @return
      */
-    List<StatisticVo> yearRank(String parentCategory, Integer userId, String year);
+    List<IEStatisticVo> yearRank(String parentCategory, Integer userId, String year);
+
+    /**
+     * 分页模糊查询收支记录(管理员)
+     * @param page
+     * @param ieRecordVo
+     * @return
+     */
+    IPage<IERecordVo> selectPageRecordAD(IPage<IERecordVo> page, IERecordVo ieRecordVo);
+
+    /**
+     * 导出收支记录的分页查询
+     * @param page
+     * @return
+     */
+    Page<IERecordExcelVo> selectPageRecordExcel(Page<IERecordExcelVo> page, Integer userId);
+
+    /**
+     * 导出所有用户收支记录Excel(管理员)
+     * @param ieRecordExcelADVoPage
+     * @return
+     */
+    Page<IERecordExcelADVo> selectPageRecordExcelAD(Page<IERecordExcelADVo> ieRecordExcelADVoPage);
+
 }

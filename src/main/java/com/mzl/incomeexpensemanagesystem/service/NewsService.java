@@ -1,5 +1,6 @@
 package com.mzl.incomeexpensemanagesystem.service;
 
+import com.mzl.incomeexpensemanagesystem.entity.Announcement;
 import com.mzl.incomeexpensemanagesystem.entity.News;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mzl.incomeexpensemanagesystem.entity.UserNews;
@@ -101,5 +102,33 @@ public interface NewsService extends IService<News> {
      * @return
      */
     RetResult selectIsCollectNews(Integer newsId);
+
+    /**
+     * 添加新闻(管理员)
+     * @param news
+     * @return
+     */
+    RetResult addNews(News news);
+
+    /**
+     * 修改新闻(管理员)
+     * @param news
+     * @return
+     */
+    RetResult updateNews(News news);
+
+    /**
+     * 删除新闻(管理员)
+     * @param id
+     * @return
+     */
+    RetResult deleteNews(Integer id);
+
+    /**
+     * 批量删除新闻(管理员)
+     * @param ids
+     * @return
+     */
+    RetResult deleteBatchNews(Integer[] ids);
 
 }

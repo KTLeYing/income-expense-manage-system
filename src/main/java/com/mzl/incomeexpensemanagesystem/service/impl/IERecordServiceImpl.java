@@ -1,28 +1,32 @@
 package com.mzl.incomeexpensemanagesystem.service.impl;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.mzl.incomeexpensemanagesystem.entity.IECategory;
 import com.mzl.incomeexpensemanagesystem.entity.IERecord;
-import com.mzl.incomeexpensemanagesystem.enums.RetCodeEnum;
+import com.mzl.incomeexpensemanagesystem.excel.vo.IERecordExcelADVo;
 import com.mzl.incomeexpensemanagesystem.mapper.IERecordMapper;
 import com.mzl.incomeexpensemanagesystem.response.RetResult;
 import com.mzl.incomeexpensemanagesystem.service.IERecordService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mzl.incomeexpensemanagesystem.service.UserService;
 import com.mzl.incomeexpensemanagesystem.vo.AnalysisVo;
+import com.mzl.incomeexpensemanagesystem.excel.vo.IERecordExcelVo;
 import com.mzl.incomeexpensemanagesystem.vo.IERecordVo;
-import com.mzl.incomeexpensemanagesystem.vo.StatisticVo;
+import com.mzl.incomeexpensemanagesystem.vo.IEStatisticVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.net.InetAddress;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -48,6 +52,16 @@ public class IERecordServiceImpl extends ServiceImpl<IERecordMapper, IERecord> i
     private UserService  userService;
 
     /**
+     * 每个工作表sheet存储的记录数 100W(1000000)
+     */
+    private static final Integer PER_SHEET_ROW_COUNT = 1000000;
+
+    /**
+     * 每次分页查询后向EXCEL写入的记录数(查询每页数据大小) 20W（200000）
+     */
+    private static final Integer PER_WRITE_ROW_COUNT = 200000;
+
+    /**
      * 添加收支记录
      * @param ieRecord
      * @return
@@ -58,7 +72,7 @@ public class IERecordServiceImpl extends ServiceImpl<IERecordMapper, IERecord> i
             Date now = new Date();
             ieRecord.setCreateTime(now);
         }
-        ieRecord.setUserId(userService.getUser().getUserId());
+        ieRecord.setUserId(userService.getUserId());
         ieRecordMapper.insert(ieRecord);
         return RetResult.success();
     }
@@ -81,7 +95,7 @@ public class IERecordServiceImpl extends ServiceImpl<IERecordMapper, IERecord> i
      */
     @Override
     public RetResult updateRecord(IERecord ieRecord) {
-        ieRecord.setUserId(userService.getUser().getUserId());
+        ieRecord.setUserId(userService.getUserId());
         ieRecordMapper.updateById(ieRecord);
         return RetResult.success();
     }
@@ -95,7 +109,7 @@ public class IERecordServiceImpl extends ServiceImpl<IERecordMapper, IERecord> i
     public RetResult selectAllRecord() {
         QueryWrapper<IERecord> queryWrapper = new QueryWrapper<>();
         //获取当前用户
-        Integer userId = userService.getUser().getUserId();
+        Integer userId = userService.getUserId();
         queryWrapper.eq("user_id", userId);
         List<IERecord> recordList = ieRecordMapper.selectList(queryWrapper);
         return RetResult.success(recordList);
@@ -119,12 +133,12 @@ public class IERecordServiceImpl extends ServiceImpl<IERecordMapper, IERecord> i
             pageSize = 10;
         }
         //获取当前用户
-        Integer userId = userService.getUser().getUserId();
+        Integer userId = userService.getUserId();
         ieRecordVo.setUserId(userId);
         IPage<IERecordVo> page = new Page<>(currentPage, pageSize);
-        IPage<IERecordVo> ieCategoryIPage = ieRecordMapper.selectPageRecord(page, ieRecordVo);
-        log.info("分页模糊查询当前用户收支记录=====>" + "收支类型分页结果：" + ieCategoryIPage.getRecords());
-        return RetResult.success(ieCategoryIPage);
+        IPage<IERecordVo> ieRecordVoIPage = ieRecordMapper.selectPageRecord(page, ieRecordVo);
+        log.info("分页模糊查询当前用户收支记录=====>" + "收支记录分页结果：" + ieRecordVoIPage.getRecords());
+        return RetResult.success(ieRecordVoIPage);
     }
 
     /**
@@ -152,10 +166,10 @@ public class IERecordServiceImpl extends ServiceImpl<IERecordMapper, IERecord> i
         Integer leastYear = year - 10;
         //统计近10年收入
         String parentCategory = "收入";
-        List<StatisticVo> statisticIncomeVos = ieRecordMapper.statisticTenYear(year, leastYear, parentCategory, userId);
+        List<IEStatisticVo> statisticIncomeVos = ieRecordMapper.statisticTenYear(year, leastYear, parentCategory, userId);
         //统计近10年支出
         parentCategory = "支出";
-        List<StatisticVo> statisticExpenseVos = ieRecordMapper.statisticTenYear(year, leastYear, parentCategory, userId);
+        List<IEStatisticVo> statisticExpenseVos = ieRecordMapper.statisticTenYear(year, leastYear, parentCategory, userId);
         HashMap<String, Object> statisticsData = new HashMap<>();
         statisticsData.put("statisticIncomeVos", statisticIncomeVos);
         statisticsData.put("statisticExpenseVos", statisticExpenseVos);
@@ -174,14 +188,14 @@ public class IERecordServiceImpl extends ServiceImpl<IERecordMapper, IERecord> i
             SimpleDateFormat sf = new SimpleDateFormat("yyyy");
             year = sf.format(now);
         }
-        Integer userId = userService.getUser().getUserId();
+        Integer userId = userService.getUserId();
         //统计该年每月的收支消费数
         //统计每月收入
         String parentCategory = "收入";
-        List<StatisticVo> statisticIncomeVos = ieRecordMapper.statisticByYear(year, parentCategory, userId);
+        List<IEStatisticVo> statisticIncomeVos = ieRecordMapper.statisticByYear(year, parentCategory, userId);
         //统计每月支出
         parentCategory = "支出";
-        List<StatisticVo> statisticExpenseVos = ieRecordMapper.statisticByYear(year, parentCategory, userId);
+        List<IEStatisticVo> statisticExpenseVos = ieRecordMapper.statisticByYear(year, parentCategory, userId);
         HashMap<String, Object> statisticsData = new HashMap<>();
         statisticsData.put("statisticIncomeVos", statisticIncomeVos);
         statisticsData.put("statisticExpenseVos", statisticExpenseVos);
@@ -200,13 +214,13 @@ public class IERecordServiceImpl extends ServiceImpl<IERecordMapper, IERecord> i
             SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM");
             time = sf.format(now);
         }
-        Integer userId = userService.getUser().getUserId();
+        Integer userId = userService.getUserId();
         String parentCategory = "收入";
         //统计收入的个子类占比
-        List<StatisticVo> statisticIncomeVos = ieRecordMapper.statisticSonCategory(time, parentCategory, userId);
+        List<IEStatisticVo> statisticIncomeVos = ieRecordMapper.statisticSonCategory(time, parentCategory, userId);
         //统计支出的个子类占比
         parentCategory = "支出";
-        List<StatisticVo> statisticExpenseVos = ieRecordMapper.statisticSonCategory(time, parentCategory, userId);
+        List<IEStatisticVo> statisticExpenseVos = ieRecordMapper.statisticSonCategory(time, parentCategory, userId);
         HashMap<String, Object> statisticsData = new HashMap<>();
         statisticsData.put("statisticIncomeVos", statisticIncomeVos);
         statisticsData.put("statisticExpenseVos", statisticExpenseVos);
@@ -240,13 +254,13 @@ public class IERecordServiceImpl extends ServiceImpl<IERecordMapper, IERecord> i
             SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
             toTime = sf.format(now);
         }
-        Integer userId = userService.getUser().getUserId();
+        Integer userId = userService.getUserId();
         String parentCategory = "收入";
         //统计收入的各子类
-        List<StatisticVo> statisticIncomeVos = ieRecordMapper.statisticByPeriod(fromTime, toTime, parentCategory, userId);
+        List<IEStatisticVo> statisticIncomeVos = ieRecordMapper.statisticByPeriod(fromTime, toTime, parentCategory, userId);
         //统计支出的各子类
         parentCategory = "支出";
-        List<StatisticVo> statisticExpenseVos = ieRecordMapper.statisticByPeriod(fromTime, toTime, parentCategory, userId);
+        List<IEStatisticVo> statisticExpenseVos = ieRecordMapper.statisticByPeriod(fromTime, toTime, parentCategory, userId);
         HashMap<String, Object> statisticsData = new HashMap<>();
         statisticsData.put("statisticIncomeVos", statisticIncomeVos);
         statisticsData.put("statisticExpenseVos", statisticExpenseVos);
@@ -551,6 +565,242 @@ public class IERecordServiceImpl extends ServiceImpl<IERecordMapper, IERecord> i
         analysisData.put("lastMonthData", lastYearData);
 
         return RetResult.success(analysisData);
+    }
+
+    /**
+     * 分页模糊查询收支记录(管理员)
+     * @param ieRecordVo
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public RetResult selectPageRecordAD(IERecordVo ieRecordVo, Integer currentPage, Integer pageSize) {
+        if (currentPage == null || currentPage == 0){
+            //不传默认为第一页
+            currentPage = 1;
+        }
+        if (pageSize == null || pageSize == 0){
+            //不传默认10条
+            pageSize = 10;
+        }
+
+        IPage<IERecordVo> page = new Page<>(currentPage, pageSize);
+        IPage<IERecordVo> ieRecordVoIPage = ieRecordMapper.selectPageRecordAD(page, ieRecordVo);
+        log.info("分页模糊查询收支记录(管理员)=====>" + "收支记录结果：" + ieRecordVoIPage.getRecords());
+        return RetResult.success(ieRecordVoIPage);
+    }
+
+    /**
+     * 添加收支记录(管理员)
+     * @param ieRecord
+     * @return
+     */
+    @Override
+    public RetResult addRecordAD(IERecord ieRecord) {
+        if (ieRecord.getCreateTime() == null || StringUtils.isEmpty(String.valueOf(ieRecord.getCreateTime()))){
+            Date now = new Date();
+            ieRecord.setCreateTime(now);
+        }
+        ieRecordMapper.insert(ieRecord);
+        return RetResult.success();
+    }
+
+    /**
+     * 修改收支记录(管理员)
+     * @param ieRecord
+     * @return
+     */
+    @Override
+    public RetResult updateRecordAD(IERecord ieRecord) {
+        IERecord ieRecord1 = ieRecordMapper.selectById(ieRecord.getUserId());
+        ieRecord.setCreateTime(ieRecord1.getCreateTime());
+        ieRecordMapper.updateById(ieRecord);
+        return RetResult.success();
+    }
+
+    /**
+     * 导出当前用户所有收支记录Excel
+     * @param response
+     */
+    @Override
+    public void exportAllRecord(HttpServletResponse response) {
+        String fileName = "user_record_data";
+        // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
+        response.setContentType("application/vnd.ms-excel");
+        response.setCharacterEncoding("utf-8");
+        // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
+
+        Integer userId = userService.getUserId();
+
+        IERecordExcelVo ieRecordExcelVo = new IERecordExcelVo();
+        QueryWrapper<IERecord> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId);
+        //总记录数
+        Integer totalRowCount = ieRecordMapper.selectCount(queryWrapper);
+        log.info("导出当前用户所有收支记录Excel=====>" + "总记录数：" + totalRowCount);
+        //总工作表(sheet)数
+        Integer sheetCount = totalRowCount % PER_SHEET_ROW_COUNT == 0 ? (totalRowCount / PER_SHEET_ROW_COUNT) : (totalRowCount / PER_SHEET_ROW_COUNT + 1);
+        log.info("导出当前用户所有收支记录Excel=====>" + "总工作表(sheet)数：" + sheetCount);
+
+        ServletOutputStream out = null;
+        ExcelWriter excelWriter = null;
+
+        try {
+            out = response.getOutputStream();
+            excelWriter = EasyExcel.write(out).build();
+            WriteSheet writeSheet = null;
+            //存储总数据的list
+            List<IERecordExcelVo> ieRecordExcelVoList = new ArrayList<>();
+            //分页参数
+            Page<IERecordExcelVo> ieRecordExcelVoPage = new Page<>();
+            //设置分页参数每页大小
+            ieRecordExcelVoPage.setSize(PER_WRITE_ROW_COUNT);
+            if (sheetCount > 1){
+                //数据量大于100w
+                //每个工作表(sheet)的查询次数
+                Integer perSheetWriteCount = PER_SHEET_ROW_COUNT / PER_WRITE_ROW_COUNT;
+                //最后一个总工作表(sheet)的查询次数
+                Integer lastSheetWriteCount = totalRowCount % PER_SHEET_ROW_COUNT == 0 ?
+                        perSheetWriteCount :
+                        (totalRowCount % PER_SHEET_ROW_COUNT % PER_WRITE_ROW_COUNT == 0 ? totalRowCount % PER_SHEET_ROW_COUNT / PER_WRITE_ROW_COUNT : (totalRowCount % PER_SHEET_ROW_COUNT / PER_WRITE_ROW_COUNT + 1));
+                for (int i = 0; i < sheetCount; i++) {
+                    for (int j = 0; j < (i != sheetCount? perSheetWriteCount : lastSheetWriteCount); j++) {
+                        Integer current = j + 1 + perSheetWriteCount * i;
+                        //设置分页参数当前页数
+                        ieRecordExcelVoPage.setCurrent(current);
+                        log.info("导出当前用户所有收支记录Excel=====>" + "当前页数：" + current);
+                        //收支记录的分页查询
+                        ieRecordExcelVoPage = ieRecordMapper.selectPageRecordExcel(ieRecordExcelVoPage, userId);
+                        log.info("导出当前用户所有收支记录Excel=====>" + "收支记录分页数据(多个sheet)：" + ieRecordExcelVoPage);
+                        ieRecordExcelVoList = ieRecordExcelVoPage.getRecords();
+
+                        //将这个工作表结果写入excel
+                        writeSheet = EasyExcel.writerSheet(i, "收支记录" + (i + 1)).head(IERecordExcelVo.class).build();
+                        excelWriter.write(ieRecordExcelVoList, writeSheet);
+                        ieRecordExcelVoList.clear();
+                    }
+                }
+
+            } else {
+                //只有一个工作表(sheet)的数据
+                Integer perSheetWriteCount = PER_SHEET_ROW_COUNT / PER_WRITE_ROW_COUNT;
+                //查询次数
+                Integer writeCount = totalRowCount % PER_WRITE_ROW_COUNT == 0 ? (totalRowCount / PER_WRITE_ROW_COUNT) : (totalRowCount / PER_WRITE_ROW_COUNT + 1);
+                for (int i = 1; i <= writeCount; i++) {
+                    //设置分页参数当前页数
+                    ieRecordExcelVoPage.setCurrent(i);
+                    log.info("导出当前用户所有收支记录Excel=====>" + "当前页数：" + i);
+                    //收支记录的分页查询
+                    ieRecordExcelVoPage = ieRecordMapper.selectPageRecordExcel(ieRecordExcelVoPage, userId);
+                    log.info("导出当前用户所有收支记录Excel=====>" + "收支记录分页数据(1个sheet)：" + ieRecordExcelVoPage);
+                    ieRecordExcelVoList = ieRecordExcelVoPage.getRecords();
+
+                    //将这个工作表结果写入excel
+                    writeSheet = EasyExcel.writerSheet(1, "收支记录").head(IERecordExcelVo.class).build();
+                    excelWriter.write(ieRecordExcelVoList, writeSheet);
+                    ieRecordExcelVoList.clear();
+                }
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        } finally {
+            if (excelWriter != null) {
+                excelWriter.finish();
+            }
+        }
+
+    }
+
+    /**
+     * 导出所有用户收支记录Excel(管理员)
+     * @param response
+     */
+    @Override
+    public void exportAllRecordAD(HttpServletResponse response) {
+        String fileName = "all_user_record_data";
+        // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
+        response.setContentType("application/vnd.ms-excel");
+        response.setCharacterEncoding("utf-8");
+        // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
+
+        Integer userId = userService.getUserId();
+
+        //总记录数
+        Integer totalRowCount = ieRecordMapper.selectCount(null);
+        log.info("导出所有用户收支记录Excel(管理员)=====>" + "总记录数：" + totalRowCount);
+        //总工作表(sheet)数
+        Integer sheetCount = totalRowCount % PER_SHEET_ROW_COUNT == 0 ? (totalRowCount / PER_SHEET_ROW_COUNT) : (totalRowCount / PER_SHEET_ROW_COUNT + 1);
+        log.info("导出所有用户收支记录Excel(管理员)=====>" + "总工作表(sheet)数：" + sheetCount);
+
+        ServletOutputStream out = null;
+        ExcelWriter excelWriter = null;
+
+        try {
+            out = response.getOutputStream();
+            excelWriter = EasyExcel.write(out).build();
+            WriteSheet writeSheet = null;
+            //存储总数据的list
+            List<IERecordExcelADVo> ieRecordExcelADVoList = new ArrayList<>();
+            //分页参数
+            Page<IERecordExcelADVo> ieRecordExcelADVoPage = new Page<>();
+            //设置分页参数每页大小
+            ieRecordExcelADVoPage.setSize(PER_WRITE_ROW_COUNT);
+            if (sheetCount > 1){
+                //数据量大于100w
+                //每个工作表(sheet)的查询次数
+                Integer perSheetWriteCount = PER_SHEET_ROW_COUNT / PER_WRITE_ROW_COUNT;
+                //最后一个总工作表(sheet)的查询次数
+                Integer lastSheetWriteCount = totalRowCount % PER_SHEET_ROW_COUNT == 0 ?
+                        perSheetWriteCount :
+                        (totalRowCount % PER_SHEET_ROW_COUNT % PER_WRITE_ROW_COUNT == 0 ? totalRowCount % PER_SHEET_ROW_COUNT / PER_WRITE_ROW_COUNT : (totalRowCount % PER_SHEET_ROW_COUNT / PER_WRITE_ROW_COUNT + 1));
+                for (int i = 0; i < sheetCount; i++) {
+                    for (int j = 0; j < (i != sheetCount? perSheetWriteCount : lastSheetWriteCount); j++) {
+                        Integer current = j + 1 + perSheetWriteCount * i;
+                        //设置分页参数当前页数
+                        ieRecordExcelADVoPage.setCurrent(current);
+                        log.info("导出所有用户收支记录Excel(管理员)=====>" + "当前页数：" + current);
+                        //收支记录的分页查询
+                        ieRecordExcelADVoPage = ieRecordMapper.selectPageRecordExcelAD(ieRecordExcelADVoPage);
+                        log.info("导出所有用户收支记录Excel(管理员)=====>" + "收支记录分页数据(多个sheet)：" + ieRecordExcelADVoPage);
+                        ieRecordExcelADVoList = ieRecordExcelADVoPage.getRecords();
+
+                        //将这个工作表结果写入excel
+                        writeSheet = EasyExcel.writerSheet(i, "收支记录" + (i + 1)).head(IERecordExcelADVo.class).build();
+                        excelWriter.write(ieRecordExcelADVoList, writeSheet);
+                        ieRecordExcelADVoList.clear();
+                    }
+                }
+
+            } else {
+                //只有一个工作表(sheet)的数据
+                Integer perSheetWriteCount = PER_SHEET_ROW_COUNT / PER_WRITE_ROW_COUNT;
+                //查询次数
+                Integer writeCount = totalRowCount % PER_WRITE_ROW_COUNT == 0 ? (totalRowCount / PER_WRITE_ROW_COUNT) : (totalRowCount / PER_WRITE_ROW_COUNT + 1);
+                for (int i = 1; i <= writeCount; i++) {
+                    //设置分页参数当前页数
+                    ieRecordExcelADVoPage.setCurrent(i);
+                    log.info("导出所有用户收支记录Excel(管理员)=====>" + "当前页数：" + i);
+                    //收支记录的分页查询
+                    ieRecordExcelADVoPage = ieRecordMapper.selectPageRecordExcelAD(ieRecordExcelADVoPage);
+                    log.info("导出所有用户收支记录Excel(管理员)=====>" + "收支记录分页数据(1个sheet)：" + ieRecordExcelADVoPage);
+                    ieRecordExcelADVoList = ieRecordExcelADVoPage.getRecords();
+
+                    //将这个工作表结果写入excel
+                    writeSheet = EasyExcel.writerSheet(1, "收支记录").head(IERecordExcelADVo.class).build();
+                    excelWriter.write(ieRecordExcelADVoList, writeSheet);
+                    ieRecordExcelADVoList.clear();
+                }
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        } finally {
+            if (excelWriter != null) {
+                excelWriter.finish();
+            }
+        }
     }
 
 

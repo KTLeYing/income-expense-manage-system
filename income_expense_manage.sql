@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80019
 File Encoding         : 65001
 
-Date: 2022-01-06 21:01:59
+Date: 2022-01-26 19:17:48
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -21,11 +21,11 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `admin`;
 CREATE TABLE `admin` (
   `admin_id` int NOT NULL AUTO_INCREMENT COMMENT '管理员自增id',
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '管理员名',
+  `admin_name` varchar(255) DEFAULT NULL COMMENT '管理员登录名',
   `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '密码',
   `avatar_path` varchar(255) DEFAULT NULL COMMENT '头像路径',
   PRIMARY KEY (`admin_id`),
-  KEY `admin_name_IDX` (`name`) USING BTREE
+  KEY `admin_name_name_IDX` (`admin_name`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='管理员表';
 
 -- ----------------------------
@@ -257,7 +257,7 @@ CREATE TABLE `user` (
   `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '邮箱',
   `phone` varchar(255) DEFAULT NULL COMMENT '手机号',
   `avatar_path` varchar(255) DEFAULT NULL COMMENT '头像路径',
-  `banned` tinyint DEFAULT '1' COMMENT '是否已经被禁用，1:未被禁用   0: 已被禁用',
+  `banned` tinyint DEFAULT '1' COMMENT '是否已经被禁用，1:未被禁用   2: 已被禁用',
   `deleted` tinyint DEFAULT '1' COMMENT '是否已经删除，1：未删除  0: 已删除',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
   `last_login_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '上次登录时间',

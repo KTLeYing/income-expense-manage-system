@@ -1,7 +1,6 @@
 package com.mzl.incomeexpensemanagesystem.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mzl.incomeexpensemanagesystem.entity.Budget;
 import com.mzl.incomeexpensemanagesystem.enums.RetCodeEnum;
 import com.mzl.incomeexpensemanagesystem.mapper.BudgetMapper;
@@ -9,9 +8,8 @@ import com.mzl.incomeexpensemanagesystem.mapper.IERecordMapper;
 import com.mzl.incomeexpensemanagesystem.response.RetResult;
 import com.mzl.incomeexpensemanagesystem.service.BudgetService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.mzl.incomeexpensemanagesystem.service.IERecordService;
 import com.mzl.incomeexpensemanagesystem.service.UserService;
-import com.mzl.incomeexpensemanagesystem.vo.StatisticVo;
+import com.mzl.incomeexpensemanagesystem.vo.IEStatisticVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,10 +150,10 @@ public class BudgetServiceImpl extends ServiceImpl<BudgetMapper, Budget> impleme
         Integer userId = userService.getUserId();
         //查询收入排行榜Top10
         String parentCategory = "收入";
-        List<StatisticVo> monthIncomeRank = ieRecordMapper.monthRank(parentCategory, userId, yearMonth);
+        List<IEStatisticVo> monthIncomeRank = ieRecordMapper.monthRank(parentCategory, userId, yearMonth);
         //查询支出排行榜Top10
         parentCategory = "支出";
-        List<StatisticVo> monthExpenseRank = ieRecordMapper.monthRank(parentCategory, userId, yearMonth);
+        List<IEStatisticVo> monthExpenseRank = ieRecordMapper.monthRank(parentCategory, userId, yearMonth);
         //封装结果
         JSONObject rankData = new JSONObject();
         rankData.put("monthIncome", monthIncomeRank);
@@ -295,10 +293,10 @@ public class BudgetServiceImpl extends ServiceImpl<BudgetMapper, Budget> impleme
         Integer userId = userService.getUserId();
         //查询收入排行榜Top10
         String parentCategory = "收入";
-        List<StatisticVo> yearIncomeRank = ieRecordMapper.yearRank(parentCategory, userId, year);
+        List<IEStatisticVo> yearIncomeRank = ieRecordMapper.yearRank(parentCategory, userId, year);
         //查询支出排行榜Top10
         parentCategory = "支出";
-        List<StatisticVo> yearExpenseRank = ieRecordMapper.yearRank(parentCategory, userId, year);
+        List<IEStatisticVo> yearExpenseRank = ieRecordMapper.yearRank(parentCategory, userId, year);
         //封装结果
         JSONObject rankData = new JSONObject();
         rankData.put("yearIncome", yearIncomeRank);

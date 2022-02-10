@@ -9,10 +9,12 @@ import com.mzl.incomeexpensemanagesystem.vo.IERecordVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.models.auth.In;
+import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 
 /**
@@ -65,6 +67,12 @@ public class IERecordController {
     @ApiOperation(value = "分页模糊查询当前用户收支记录")
     public RetResult selectPageRecord(IERecordVo ieRecordVo, Integer currentPage, Integer pageSize) throws ParseException {
         return ieRecordService.selectPageRecord(ieRecordVo, currentPage, pageSize);
+    }
+
+    @PostMapping(value = "/exportAllRecord", produces = "application/octet-stream")
+    @ApiOperation(value = "导出当前用户所有收支记录Excel")
+    public void exportAllRecord(HttpServletResponse response){
+        ieRecordService.exportAllRecord(response);
     }
 
 }

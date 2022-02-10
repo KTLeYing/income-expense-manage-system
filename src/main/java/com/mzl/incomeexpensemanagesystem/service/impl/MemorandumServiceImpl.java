@@ -13,7 +13,10 @@ import com.mzl.incomeexpensemanagesystem.vo.WishListVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -66,6 +69,18 @@ public class MemorandumServiceImpl extends ServiceImpl<MemorandumMapper, Memoran
     @Override
     public RetResult deleteMemorandum(Integer id) {
         memorandumMapper.deleteById(id);
+        return RetResult.success();
+    }
+
+    /**
+     * 批量删除备忘录
+     * @param ids
+     * @return
+     */
+    @Override
+    public RetResult deleteBatchMemorandum(Integer[] ids) {
+        List<Integer> idList = Arrays.stream(ids).collect(Collectors.toList());
+        memorandumMapper.deleteBatchIds(idList);
         return RetResult.success();
     }
 

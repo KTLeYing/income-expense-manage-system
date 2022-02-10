@@ -19,7 +19,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value="StatisticVo对象", description="收支统计返回实体类表")
-public class StatisticVo implements Serializable {
+public class IEStatisticVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -33,11 +33,14 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
       @ApiModelProperty(value = "用户自增id")
-        @TableId(value = "user_id", type = IdType.AUTO)
+      @TableId(value = "user_id", type = IdType.AUTO)
       private Integer userId;
 
       @ApiModelProperty(value = "用户名")
       private String username;
+
+      @ApiModelProperty(value = "昵称")
+      private String name;
 
       @ApiModelProperty(value = "密码")
       private String password;
