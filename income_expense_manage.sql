@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80019
 File Encoding         : 65001
 
-Date: 2022-02-10 09:10:25
+Date: 2022-01-06 21:01:59
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -21,21 +21,16 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `admin`;
 CREATE TABLE `admin` (
   `admin_id` int NOT NULL AUTO_INCREMENT COMMENT '管理员自增id',
-  `admin_name` varchar(255) DEFAULT NULL COMMENT '管理员登录名',
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '管理员名',
   `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '密码',
-  `phone` varchar(255) DEFAULT NULL COMMENT '手机号',
   `avatar_path` varchar(255) DEFAULT NULL COMMENT '头像路径',
   PRIMARY KEY (`admin_id`),
-  KEY `admin_name_name_IDX` (`admin_name`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='管理员表';
+  KEY `admin_name_IDX` (`name`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='管理员表';
 
 -- ----------------------------
 -- Records of admin
 -- ----------------------------
-INSERT INTO `admin` VALUES ('1', 'admzl', 'b52b2984cb52f3a81fc9e41e746c94b0c683f73a30068d59', '13652707142', 'http://localhost:8080/ddgh/ttthhh.jpg');
-INSERT INTO `admin` VALUES ('2', 'adlisi', 'f3e89b784335e8a75839e29d367949a97970280899f7dc0a', '13652707142', 'http://localhost:8080/ddgh/ttthhh.jpg');
-INSERT INTO `admin` VALUES ('3', 'adwangwu', 'd22d61522c1d827b0d70da45b9db9145d51135e68007850a', '13652707142', 'http://localhost:8888/ggg.png');
-INSERT INTO `admin` VALUES ('4', 'adzhangsan', 'f7514016b065e94066d33793e42e66c3614be43a59230097', '13652707142', 'http://11.168.34.112:8090/gff/lif.gif');
 
 -- ----------------------------
 -- Table structure for announcement
@@ -49,7 +44,7 @@ CREATE TABLE `announcement` (
   PRIMARY KEY (`announcement_id`),
   KEY `announcement_title_IDX` (`title`) USING BTREE,
   KEY `announcement_create_time_IDX` (`create_time`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of announcement
@@ -58,7 +53,9 @@ INSERT INTO `announcement` VALUES ('1', '公告1', '静待花开减肥换句话�
 INSERT INTO `announcement` VALUES ('2', '公告2', '静待花开减肥换句话说', '2021-02-06 12:35:54');
 INSERT INTO `announcement` VALUES ('3', '公告3', '静待花开减肥换句话说', '2022-01-06 10:35:54');
 INSERT INTO `announcement` VALUES ('4', '公告4', '静待花开减肥换句话说', '2021-12-07 12:35:54');
-INSERT INTO `announcement` VALUES ('5', '公告5.1', '静待花开减肥', '2021-11-06 12:35:54');
+INSERT INTO `announcement` VALUES ('5', '公告5', '静待花开减肥换句话说', '2021-11-06 12:35:54');
+INSERT INTO `announcement` VALUES ('6', '公告6', '静待花开减肥换句话说', '2022-01-03 12:35:54');
+INSERT INTO `announcement` VALUES ('7', '公告7', '静待花开减肥换句话说', '2022-01-01 12:35:54');
 
 -- ----------------------------
 -- Table structure for budget
@@ -83,31 +80,6 @@ INSERT INTO `budget` VALUES ('3', '1', '1000', '1', '2022-01-05 03:18:35');
 INSERT INTO `budget` VALUES ('5', '1', '30000', '1', '2021-12-05 03:19:36');
 INSERT INTO `budget` VALUES ('6', '1', '20000', '2', '2022-01-05 03:23:51');
 INSERT INTO `budget` VALUES ('8', '1', '50000', '2', '2021-01-05 03:27:15');
-
--- ----------------------------
--- Table structure for feedback
--- ----------------------------
-DROP TABLE IF EXISTS `feedback`;
-CREATE TABLE `feedback` (
-  `feedback_id` int NOT NULL AUTO_INCREMENT COMMENT '用户反馈自增id',
-  `user_id` int DEFAULT NULL COMMENT '用户id',
-  `content` text COMMENT '反馈内容',
-  `collected` tinyint DEFAULT '1' COMMENT '收藏反馈: 1:未收藏  2:已收藏',
-  `create_time` datetime DEFAULT NULL COMMENT '反馈创建时间',
-  PRIMARY KEY (`feedback_id`),
-  KEY `feedback_userId_index` (`feedback_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='用户反馈';
-
--- ----------------------------
--- Records of feedback
--- ----------------------------
-INSERT INTO `feedback` VALUES ('1', '1', '继续完善系统功能，提高用户体验', '2', '2022-02-07 09:27:47');
-INSERT INTO `feedback` VALUES ('2', '2', '继续完善系统功能，提高用户体验', '2', '2022-02-07 09:28:05');
-INSERT INTO `feedback` VALUES ('3', '2', '继续完善系统功能，提高用户体验', '1', '2022-02-07 09:28:05');
-INSERT INTO `feedback` VALUES ('4', '1', '继续完善系统功能，提高用户体验', '1', '2022-02-09 11:24:23');
-INSERT INTO `feedback` VALUES ('5', '1', '继续完善系统功能，提高用户体验', '1', '2022-02-09 11:24:39');
-INSERT INTO `feedback` VALUES ('6', '1', '继续完善系统功能，提高用户体验', '1', '2022-02-09 11:25:29');
-INSERT INTO `feedback` VALUES ('7', '1', '继续完善系统功能，提高用户体验', '1', '2022-02-09 11:25:37');
 
 -- ----------------------------
 -- Table structure for i_e_category
@@ -159,15 +131,15 @@ CREATE TABLE `i_e_record` (
   KEY `i_e_record_i_e_category_id_IDX` (`i_e_category_id`) USING BTREE,
   KEY `i_e_record_note_IDX` (`note`) USING BTREE,
   KEY `i_e_record_create_time_IDX` (`create_time`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8 COMMENT='收支记录表';
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8 COMMENT='收支记录表';
 
 -- ----------------------------
 -- Records of i_e_record
 -- ----------------------------
 INSERT INTO `i_e_record` VALUES ('1', '1', '1', '1000', '2021.12的餐补', '2021-10-30 07:09:52');
 INSERT INTO `i_e_record` VALUES ('2', '1', '1', '1000', '2021.11的餐补', '2021-12-23 07:15:58');
-INSERT INTO `i_e_record` VALUES ('3', '2', '2', '7000', '2021.11的工资', '2021-12-30 07:16:42');
-INSERT INTO `i_e_record` VALUES ('4', '2', '2', '18000', '2021.10的工资', '2020-12-30 07:16:47');
+INSERT INTO `i_e_record` VALUES ('3', '1', '2', '7000', '2021.11的工资', '2021-12-30 07:16:42');
+INSERT INTO `i_e_record` VALUES ('4', '1', '2', '18000', '2021.10的工资', '2020-12-30 07:16:47');
 INSERT INTO `i_e_record` VALUES ('5', '1', '3', '1500', '2021.10的伙食费', '2021-12-22 07:17:31');
 INSERT INTO `i_e_record` VALUES ('6', '1', '3', '1200', '2021.12的伙食费', '2020-12-26 07:17:40');
 INSERT INTO `i_e_record` VALUES ('7', '1', '4', '500', '买鞋', '2020-10-28 07:17:54');
@@ -206,8 +178,6 @@ INSERT INTO `i_e_record` VALUES ('43', '1', '4', '800', '2012.10的护肤品', '
 INSERT INTO `i_e_record` VALUES ('44', '1', '4', '300', '2011.10的护肤品', '2011-10-16 06:17:18');
 INSERT INTO `i_e_record` VALUES ('45', '1', '4', '300', '2022.01的护肤品', '2022-01-04 06:17:18');
 INSERT INTO `i_e_record` VALUES ('46', '1', '2', '6000', '2021.12的工资', '2022-01-05 05:18:49');
-INSERT INTO `i_e_record` VALUES ('47', '1', '4', '300', '2022.01的护肤品', '2022-01-04 06:17:18');
-INSERT INTO `i_e_record` VALUES ('48', '3', '2', '6600', '2021.12工资', '2022-01-05 05:18:49');
 
 -- ----------------------------
 -- Table structure for memorandum
@@ -255,7 +225,7 @@ CREATE TABLE `news` (
   KEY `news_keyword_IDX` (`keyword`) USING BTREE,
   KEY `news_type_IDX` (`type`) USING BTREE,
   KEY `news_create_time_IDX` (`create_time`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COMMENT='新闻表';
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='新闻表';
 
 -- ----------------------------
 -- Records of news
@@ -271,7 +241,9 @@ INSERT INTO `news` VALUES ('8', '理财技巧七', '马振七', '理财7', '32',
 INSERT INTO `news` VALUES ('9', '理财技巧八', '马振八', '理财8', '2', '0', '四发货嘎返回格式发·就按国家感觉到·感觉高加个加读后感·', '2', '2022-01-06 15:46:56');
 INSERT INTO `news` VALUES ('10', '理财技巧九', '马振九', '理财9', '2', '0', '四发货嘎返回格式发·就按国家感觉到·感觉高加个加读后感·', '2', '2022-01-06 15:46:56');
 INSERT INTO `news` VALUES ('11', '理财技巧十', '马振十', '理财10', '12', '0', '四发货嘎返回格式发·就按国家感觉到·感觉高加个加读后感·', '2', '2022-01-06 15:46:56');
-INSERT INTO `news` VALUES ('12', '理财技巧11.1', '马振le', '马振11', '0', '0', '四发货嘎返回格式发·就按国家感觉到·感觉高加个加读后感·', '1', '2022-01-06 15:46:56');
+INSERT INTO `news` VALUES ('12', '理财技巧11', '马振11', '理财11', '18', '0', '四发货嘎返回格式发·就按国家感觉到·感觉高加个加读后感·', '2', '2022-01-06 15:46:56');
+INSERT INTO `news` VALUES ('13', '理财技巧12', '马振12', '理财12', '26', '0', '四发货嘎返回格式发·就按国家感觉到·感觉高加个加读后感·', '2', '2022-01-06 15:46:56');
+INSERT INTO `news` VALUES ('14', '理财技巧13', '马振13', '理财13', '7', '0', '四发货嘎返回格式发·就按国家感觉到·感觉高加个加读后感·', '2', '2022-01-06 15:46:56');
 
 -- ----------------------------
 -- Table structure for user
@@ -280,13 +252,12 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `user_id` int NOT NULL AUTO_INCREMENT COMMENT '用户自增id',
   `username` varchar(255) NOT NULL COMMENT '用户名',
-  `name` varchar(255) DEFAULT NULL COMMENT '昵称(姓名)',
   `password` varchar(255) NOT NULL COMMENT '密码',
   `sex` tinyint DEFAULT NULL COMMENT '性别，1:男 2:女',
   `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '邮箱',
   `phone` varchar(255) DEFAULT NULL COMMENT '手机号',
   `avatar_path` varchar(255) DEFAULT NULL COMMENT '头像路径',
-  `banned` tinyint DEFAULT '1' COMMENT '是否已经被禁用，1:未被禁用   2: 已被禁用',
+  `banned` tinyint DEFAULT '1' COMMENT '是否已经被禁用，1:未被禁用   0: 已被禁用',
   `deleted` tinyint DEFAULT '1' COMMENT '是否已经删除，1：未删除  0: 已删除',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
   `last_login_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '上次登录时间',
@@ -294,59 +265,49 @@ CREATE TABLE `user` (
   KEY `user_username_IDX` (`username`) USING BTREE,
   KEY `user_email_IDX` (`email`) USING BTREE,
   KEY `user_phone_IDX` (`phone`) USING BTREE,
-  KEY `user_create_time_IDX` (`create_time`) USING BTREE,
-  KEY `user_name_IDX` (`name`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8 COMMENT='用户表';
+  KEY `user_create_time_IDX` (`create_time`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'mzl', '马振乐', '62736e840b89e1d75aa9e56d27870e949f8631434004cd00', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/ttthhh.jpg', '1', '1', '2021-12-24 19:35:13', '2022-02-09 11:23:33');
-INSERT INTO `user` VALUES ('2', 'sky', '羊', '43f115574c1bc6457e215d9ca5a08910c477868778a8e71e', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '2', '1', '2021-12-24 19:35:13', '2022-01-06 08:59:13');
-INSERT INTO `user` VALUES ('3', 'lisi', '李四', '43f115574c1bc6457e215d9ca5a08910c477868778a8e71e', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-24 19:35:13', '2021-12-24 19:36:31');
-INSERT INTO `user` VALUES ('4', 'wangwu', '王五', 'f6535896342371b582d4408f22f745d8af30a4e77fb35005', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-24 20:33:31', '2021-12-24 20:33:31');
-INSERT INTO `user` VALUES ('5', 'lili', '马丽丽', '358448c4393ac4b389c69185773565d45c89320803d25571', '2', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2012-12-24 20:48:53', '2021-12-24 20:48:53');
-INSERT INTO `user` VALUES ('6', 'yier', '李二', 'd3f869652206c7737f69918763bf4fb0fb19b16b0c54e758', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-24 20:57:07', '2021-12-24 12:57:52');
-INSERT INTO `user` VALUES ('7', 'lisan', '李三', '06a73da8c64036e94e70e30aa99465f1801d44ff8ab9c41c', '1', '2198902814@qq.com', '13652707143', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-24 21:08:24', '2021-12-24 21:08:24');
-INSERT INTO `user` VALUES ('8', 'wuwu', '呜呜', '754206e8bc95d5ef66e5253a65196727e26b76774ad0df09', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-24 21:10:49', '2021-12-24 21:11:57');
-INSERT INTO `user` VALUES ('9', 'erer', '尔尔', 'f82208e91d40209d0f241c3cc50798770744a51692636b9c', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2012-12-24 21:44:16', '2012-12-24 13:58:16');
-INSERT INTO `user` VALUES ('10', 'www', '哇哇哇', '28ea86e9e10920212880338553e72dc5b445b76a4873452a', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-24 21:58:47', '2021-12-24 13:59:46');
-INSERT INTO `user` VALUES ('11', 'yili', null, '31ff1cc86c3706b22cb1ec9d28547ca27759016d91d0bc08', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 02:26:08', '2015-12-27 02:32:02');
-INSERT INTO `user` VALUES ('12', 'tutu', null, 'a8143e544a31a8a49f84a79824e80982f05ea6418ef00401', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 10:32:55', '2021-12-27 02:35:53');
-INSERT INTO `user` VALUES ('13', 'rr', null, '69653d825e03191739172843942e4c362e24e16a5a135066', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2015-12-27 10:41:38', '2021-12-27 02:42:34');
-INSERT INTO `user` VALUES ('14', 'qq', null, '968d11f3e191f0440a80b984f5b87ba9812bd3cf9591cf01', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 10:45:29', '2012-12-27 02:46:36');
-INSERT INTO `user` VALUES ('15', 'yy', null, 'c85d8348b88848534e71247975ad25f5343016b79bb0fb15', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 02:48:54', '2021-12-27 02:48:54');
-INSERT INTO `user` VALUES ('16', 'w1', null, 'c85d8348b88848534e71247975ad25f5343016b79bb0fb15', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2015-12-27 10:51:03', '2019-12-27 10:51:03');
-INSERT INTO `user` VALUES ('17', 'ee', null, '216a7400e13784c134c25744110027405f1be9be9655ff65', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 11:15:59', '2021-12-27 03:23:01');
-INSERT INTO `user` VALUES ('18', 'e1', null, 'c91300e4c40b31482e337f84f1059325019252a44109d147', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 03:20:00', '2012-12-27 03:23:42');
-INSERT INTO `user` VALUES ('19', 'e2', null, 'c95d8f81202bd81764e8663d30e75bb62f33c4dd5c76d908', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2012-12-27 03:21:55', '2021-12-27 03:22:16');
-INSERT INTO `user` VALUES ('20', 'e3', null, '22543c43555f696263f15c51a1ff6bc9d07178b305782b02', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 04:27:09', '2020-12-27 04:27:39');
-INSERT INTO `user` VALUES ('21', 'e4', null, '746670d7889228b045b0345ae4088ea9c110539f9047be0f', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2017-12-27 04:56:23', '2021-12-27 05:02:43');
-INSERT INTO `user` VALUES ('22', 'e5', null, 'd3e243094b84b0d218677c6105e48da26b11387d8930d99d', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 05:14:56', '2021-12-27 05:15:24');
-INSERT INTO `user` VALUES ('23', 'e6', null, '49ca6e42380fc0ad1d468f63644b8bf2d14b53578b08f073', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2018-12-27 05:42:24', '2021-12-27 05:43:26');
-INSERT INTO `user` VALUES ('24', 'e8', null, '87df4019f029031422a1494056019ef63a78d2533ce61002', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 06:22:51', '2013-12-27 06:24:14');
-INSERT INTO `user` VALUES ('25', 'e9', null, '18e994f7ae9c01982f59017d419575f9f239c46352928b5c', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2019-12-27 14:40:49', '2021-12-27 06:41:53');
-INSERT INTO `user` VALUES ('26', 'e10', null, 'd46f4fa5280624d94903638c85c511e9323bf28f9385ee7d', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2020-12-27 14:45:59', '2021-12-27 06:46:24');
-INSERT INTO `user` VALUES ('27', 'e11', null, '98dd8db4f611f25470d19293284f5197ec77a0ac6552d644', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2019-12-27 07:10:29', '2017-12-27 07:10:29');
-INSERT INTO `user` VALUES ('28', 'e12', null, '43c20752eb40a91673f86e7872312da27c3d963511332602', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 07:11:43', '2021-12-27 07:12:24');
-INSERT INTO `user` VALUES ('29', 'e13', null, '66590933a13e33929015ad8f817d2c82ce23098d5d85e19c', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2019-12-27 07:14:18', '2018-12-27 07:14:47');
-INSERT INTO `user` VALUES ('30', 'e14', null, '695f0e89e17279ac38924a5d563d46a6141286620da4d003', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2012-12-27 15:15:55', '2015-12-27 07:17:22');
-INSERT INTO `user` VALUES ('31', 'e15', null, 'b8897ad5532c607906c28c9dd63c22b3617965a78078d745', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2013-12-27 07:29:21', '2021-12-27 07:29:54');
-INSERT INTO `user` VALUES ('32', 'mazl', null, 'b1b25d54ec4bb19336c9aa0c73889d914a3158f72568873a', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 12:56:58', '2021-12-27 12:56:58');
-INSERT INTO `user` VALUES ('33', 'lolo', null, 'a5bc2ae62425d66094701d20695c27b46788a32a2110d720', '1', '2198902813@qq.com', '13652707141', 'http://localhostr:8080/fgfg.png', '1', '1', '2021-12-27 13:34:17', '2021-12-27 13:42:34');
-INSERT INTO `user` VALUES ('34', 'lol', null, '22a65702546681f719b1df9ce4183c96749a470268b6cc95', '1', '2198902815@qq.com', '13652707144', 'http://localhostr:8080/fgfg.png', '1', '1', '2013-12-27 14:59:29', '2021-12-27 14:59:29');
-INSERT INTO `user` VALUES ('35', 'loli', null, '56332018478a23f097460a51387a8e69f740c4747935b79d', '1', '2198902816@qq.com', '13652707143', 'http://localhostr:8080/fgfg.png', '1', '1', '2021-12-27 15:00:29', '2021-12-27 15:00:29');
-INSERT INTO `user` VALUES ('36', 'lolu', null, '98b435e23801e1a784398d20b5d907e70a6733b99011337a', '1', '2198902817@qq.com', '13652707147', 'http://localhostr:8080/fgfg.png', '1', '1', '2014-12-27 15:00:45', '2021-12-27 15:00:45');
-INSERT INTO `user` VALUES ('37', 'go', null, 'b3974d21f59776cd6b79f32406a98ff65423f90114509746', '1', '2198902819@qq.com', '13652707149', 'http://localhostr:8080/fgfg.png', '1', '1', '2021-12-29 05:40:43', '2021-12-29 05:42:17');
-INSERT INTO `user` VALUES ('38', 'titi', '提提', '95937395e09a20740568154d07c775681291b5f81df36a0e', '1', '2198902820@qq.com', '13652707150', '', '1', '1', '2016-02-09 06:02:27', '2022-02-09 06:02:27');
-INSERT INTO `user` VALUES ('39', 'yyu', '英语', '114256433051d41192952f01830729c27a65c71a3301b635', '1', '2198902821@qq.com', '13652707151', '', '1', '1', '2022-02-09 06:07:49', '2022-02-09 06:07:49');
-INSERT INTO `user` VALUES ('40', 'yuyu', '玉玉', 'b94d4cf61b36131a5132a78c834a80f6fd5280688140b381', '1', '2198902822@qq.com', '13652707152', '', '1', '1', '2022-02-09 06:10:32', '2022-02-09 06:10:32');
-INSERT INTO `user` VALUES ('41', 'ytyt', '一套', '21f00ab0323ff44f3178d582e2c00c28711b65d870b65d83', '1', '2198902823@qq.com', '13652707153', '', '1', '1', '2022-02-09 06:11:52', '2022-02-09 06:11:52');
-INSERT INTO `user` VALUES ('42', 'yt', '一套', '545d5d53475575f980e6d88a04704bb5d21b16d144637921', '1', '2198902824@qq.com', '13652707154', '', '1', '1', '2022-02-09 06:12:52', '2022-02-09 06:12:52');
-INSERT INTO `user` VALUES ('43', 'qqq', 'QQQ', '34f83505f49402c04dc2b964d4092453dc0a77785a42ea14', '1', '2198902825@qq.com', '13652707155', '', '1', '1', '2022-02-09 06:20:23', '2022-02-09 06:20:23');
-INSERT INTO `user` VALUES ('44', 'qw', '趣味', 'a5b381a91008b1d915398849a36871561d7255a65656594e', '1', '2198902815@qq.com', '13652707156', '', '1', '0', '2022-02-09 06:22:09', '2022-02-09 06:22:09');
-INSERT INTO `user` VALUES ('45', 'qww', '请问', 'b7509629c19a110c9c705c47043b7b80bd0397d052b05d06', '1', '2198902814@qq.com', '13652707142', '', '1', '0', '2022-02-09 06:24:53', '2022-02-09 06:24:53');
-INSERT INTO `user` VALUES ('46', 'lglg', 'LG', '433e55d93244429847e2ad55539544716f9502ff82634c32', '1', '2198902814@qq.com', '13652707142', 'http://localhost:8080/hhh/hhff.jpg', '1', '0', '2022-02-09 09:46:17', '2022-02-09 09:46:17');
+INSERT INTO `user` VALUES ('1', 'mzl', 'f3e89b784335e8a75839e29d367949a97970280899f7dc0a', '1', '2198902814@qq.com', '13652707142', 'http://localhost:8080/ddgh/ttthhh.jpg', '1', '1', '2021-12-24 19:35:13', '2022-01-06 07:52:19');
+INSERT INTO `user` VALUES ('2', 'sky', '43f115574c1bc6457e215d9ca5a08910c477868778a8e71e', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-24 19:35:13', '2022-01-06 08:59:13');
+INSERT INTO `user` VALUES ('3', 'lisi', '43f115574c1bc6457e215d9ca5a08910c477868778a8e71e', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-24 19:35:13', '2021-12-24 19:36:31');
+INSERT INTO `user` VALUES ('4', 'wangwu', 'f6535896342371b582d4408f22f745d8af30a4e77fb35005', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-24 20:33:31', '2021-12-24 20:33:31');
+INSERT INTO `user` VALUES ('5', 'lili', '358448c4393ac4b389c69185773565d45c89320803d25571', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-24 20:48:53', '2021-12-24 20:48:53');
+INSERT INTO `user` VALUES ('6', 'yier', 'd3f869652206c7737f69918763bf4fb0fb19b16b0c54e758', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-24 20:57:07', '2021-12-24 12:57:52');
+INSERT INTO `user` VALUES ('7', 'yisan', '06a73da8c64036e94e70e30aa99465f1801d44ff8ab9c41c', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-24 21:08:24', '2021-12-24 21:08:24');
+INSERT INTO `user` VALUES ('8', 'wuwu', '754206e8bc95d5ef66e5253a65196727e26b76774ad0df09', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-24 21:10:49', '2021-12-24 21:11:57');
+INSERT INTO `user` VALUES ('9', 'erer', 'f82208e91d40209d0f241c3cc50798770744a51692636b9c', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-24 21:44:16', '2021-12-24 13:58:16');
+INSERT INTO `user` VALUES ('10', 'www', '28ea86e9e10920212880338553e72dc5b445b76a4873452a', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-24 21:58:47', '2021-12-24 13:59:46');
+INSERT INTO `user` VALUES ('11', 'yili', '31ff1cc86c3706b22cb1ec9d28547ca27759016d91d0bc08', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 02:26:08', '2021-12-27 02:32:02');
+INSERT INTO `user` VALUES ('12', 'tutu', 'a8143e544a31a8a49f84a79824e80982f05ea6418ef00401', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 10:32:55', '2021-12-27 02:35:53');
+INSERT INTO `user` VALUES ('13', 'rr', '69653d825e03191739172843942e4c362e24e16a5a135066', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 10:41:38', '2021-12-27 02:42:34');
+INSERT INTO `user` VALUES ('14', 'qq', '968d11f3e191f0440a80b984f5b87ba9812bd3cf9591cf01', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 10:45:29', '2021-12-27 02:46:36');
+INSERT INTO `user` VALUES ('15', 'yy', 'c85d8348b88848534e71247975ad25f5343016b79bb0fb15', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 02:48:54', '2021-12-27 02:48:54');
+INSERT INTO `user` VALUES ('16', 'w1', 'c85d8348b88848534e71247975ad25f5343016b79bb0fb15', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 10:51:03', '2021-12-27 10:51:03');
+INSERT INTO `user` VALUES ('17', 'ee', '216a7400e13784c134c25744110027405f1be9be9655ff65', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 11:15:59', '2021-12-27 03:23:01');
+INSERT INTO `user` VALUES ('18', 'e1', 'c91300e4c40b31482e337f84f1059325019252a44109d147', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 03:20:00', '2021-12-27 03:23:42');
+INSERT INTO `user` VALUES ('19', 'e2', 'c95d8f81202bd81764e8663d30e75bb62f33c4dd5c76d908', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 03:21:55', '2021-12-27 03:22:16');
+INSERT INTO `user` VALUES ('20', 'e3', '22543c43555f696263f15c51a1ff6bc9d07178b305782b02', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 04:27:09', '2021-12-27 04:27:39');
+INSERT INTO `user` VALUES ('21', 'e4', '746670d7889228b045b0345ae4088ea9c110539f9047be0f', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 04:56:23', '2021-12-27 05:02:43');
+INSERT INTO `user` VALUES ('22', 'e5', 'd3e243094b84b0d218677c6105e48da26b11387d8930d99d', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 05:14:56', '2021-12-27 05:15:24');
+INSERT INTO `user` VALUES ('23', 'e6', '49ca6e42380fc0ad1d468f63644b8bf2d14b53578b08f073', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 05:42:24', '2021-12-27 05:43:26');
+INSERT INTO `user` VALUES ('24', 'e8', '87df4019f029031422a1494056019ef63a78d2533ce61002', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 06:22:51', '2021-12-27 06:24:14');
+INSERT INTO `user` VALUES ('25', 'e9', '18e994f7ae9c01982f59017d419575f9f239c46352928b5c', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 14:40:49', '2021-12-27 06:41:53');
+INSERT INTO `user` VALUES ('26', 'e10', 'd46f4fa5280624d94903638c85c511e9323bf28f9385ee7d', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 14:45:59', '2021-12-27 06:46:24');
+INSERT INTO `user` VALUES ('27', 'e11', '98dd8db4f611f25470d19293284f5197ec77a0ac6552d644', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 07:10:29', '2021-12-27 07:10:29');
+INSERT INTO `user` VALUES ('28', 'e12', '43c20752eb40a91673f86e7872312da27c3d963511332602', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 07:11:43', '2021-12-27 07:12:24');
+INSERT INTO `user` VALUES ('29', 'e13', '66590933a13e33929015ad8f817d2c82ce23098d5d85e19c', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 07:14:18', '2021-12-27 07:14:47');
+INSERT INTO `user` VALUES ('30', 'e14', '695f0e89e17279ac38924a5d563d46a6141286620da4d003', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 15:15:55', '2021-12-27 07:17:22');
+INSERT INTO `user` VALUES ('31', 'e15', 'b8897ad5532c607906c28c9dd63c22b3617965a78078d745', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 07:29:21', '2021-12-27 07:29:54');
+INSERT INTO `user` VALUES ('32', 'mazl', 'b1b25d54ec4bb19336c9aa0c73889d914a3158f72568873a', '1', '2198902813@qq.com', '13652707141', 'http://localhost:8080/ddgh/gg.jpg', '1', '1', '2021-12-27 12:56:58', '2021-12-27 12:56:58');
+INSERT INTO `user` VALUES ('33', 'lolo', 'a5bc2ae62425d66094701d20695c27b46788a32a2110d720', '1', '2198902813@qq.com', '13652707141', 'http://localhostr:8080/fgfg.png', '1', '1', '2021-12-27 13:34:17', '2021-12-27 13:42:34');
+INSERT INTO `user` VALUES ('34', 'lol', '22a65702546681f719b1df9ce4183c96749a470268b6cc95', '1', '2198902815@qq.com', '13652707144', 'http://localhostr:8080/fgfg.png', '1', '1', '2021-12-27 14:59:29', '2021-12-27 14:59:29');
+INSERT INTO `user` VALUES ('35', 'loli', '56332018478a23f097460a51387a8e69f740c4747935b79d', '1', '2198902816@qq.com', '13652707143', 'http://localhostr:8080/fgfg.png', '1', '1', '2021-12-27 15:00:29', '2021-12-27 15:00:29');
+INSERT INTO `user` VALUES ('36', 'lolu', '98b435e23801e1a784398d20b5d907e70a6733b99011337a', '1', '2198902817@qq.com', '13652707147', 'http://localhostr:8080/fgfg.png', '1', '1', '2021-12-27 15:00:45', '2021-12-27 15:00:45');
+INSERT INTO `user` VALUES ('37', 'go', 'b3974d21f59776cd6b79f32406a98ff65423f90114509746', '1', '2198902819@qq.com', '13652707149', 'http://localhostr:8080/fgfg.png', '1', '1', '2021-12-29 05:40:43', '2021-12-29 05:42:17');
 
 -- ----------------------------
 -- Table structure for user_news

@@ -1,4 +1,0 @@
-2022-01-05 20:52:09.963 [restartedMain] WARN  s.d.s.w.readers.parameter.ParameterDataTypeReader - Trying to infer dataType java.lang.Integer[]
-2022-01-05 20:52:09.975 [restartedMain] WARN  s.d.s.w.readers.parameter.ParameterDataTypeReader - Trying to infer dataType java.lang.Integer[]
-2022-01-05 20:52:13.936 [restartedMain] WARN  s.d.s.w.readers.parameter.ParameterDataTypeReader - Trying to infer dataType java.lang.Integer[]
-2022-01-05 20:52:13.944 [restartedMain] WARN  s.d.s.w.readers.parameter.ParameterDataTypeReader - Trying to infer dataType java.lang.Integer[]

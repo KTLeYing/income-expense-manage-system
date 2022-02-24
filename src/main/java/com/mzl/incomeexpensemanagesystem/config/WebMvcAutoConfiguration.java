@@ -61,6 +61,7 @@ public class WebMvcAutoConfiguration implements WebMvcConfigurer {
                         "/actuator/**",  //放行所有actuator系统监控请求
                         "/assets/**",
                         "/applications/**",
+                        "/instances/**",
                         "/dome",
                         "/tone",
                         "/generate/**",
@@ -99,6 +100,7 @@ public class WebMvcAutoConfiguration implements WebMvcConfigurer {
                         "/actuator/**",  //放行所有actuator系统监控请求
                         "/assets/**",
                         "/applications/**",
+                        "/instances/**",
                         "/dome",
                         "/tone",
                         "/generate/**",
