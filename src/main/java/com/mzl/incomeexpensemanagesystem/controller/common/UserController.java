@@ -21,6 +21,7 @@ import java.sql.ResultSet;
  * @Version: 1.0
  */
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/user")
 @Api(value = "用户模块接口", tags = "用户模块接口")
 public class UserController {

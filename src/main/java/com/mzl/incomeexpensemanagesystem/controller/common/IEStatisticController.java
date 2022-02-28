@@ -5,6 +5,7 @@ import com.mzl.incomeexpensemanagesystem.service.IERecordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Version: 1.0
  */
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/iEStatistic")
 @Api(value = "收支统计模块接口", tags = "收支统计模块接口")
 public class IEStatisticController {

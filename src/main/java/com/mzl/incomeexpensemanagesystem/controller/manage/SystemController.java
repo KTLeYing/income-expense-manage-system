@@ -23,6 +23,7 @@ import java.text.ParseException;
  * @Version: 1.0
  */
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/system")
 @Api(value = "系统模块接口", tags = "系统模块接口")
 public class SystemController {

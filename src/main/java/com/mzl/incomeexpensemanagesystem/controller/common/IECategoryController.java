@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2021-12-22
  */
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/iECategory")
 @Api(value = "收支类型模块接口", tags = "收支类型模块接口")
 public class IECategoryController {

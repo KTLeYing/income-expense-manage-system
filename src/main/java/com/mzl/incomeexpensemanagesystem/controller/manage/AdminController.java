@@ -23,6 +23,7 @@ import java.sql.ResultSet;
  * @since 2021-12-22
  */
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/admin")
 @Api(value = "管理员模块接口", tags = "管理员模块接口")
 public class AdminController {

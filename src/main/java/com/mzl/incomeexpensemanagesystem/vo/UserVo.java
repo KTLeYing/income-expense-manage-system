@@ -29,4 +29,6 @@ public class UserVo extends User implements Serializable {
     @ApiModelProperty(value = "邮箱验证码")
     private String emailCode;
 
+    private String verifyCode;
+
 }

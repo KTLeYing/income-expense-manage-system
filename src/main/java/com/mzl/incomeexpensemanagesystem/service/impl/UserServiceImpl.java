@@ -244,7 +244,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             e.printStackTrace();
         }
         String realCode = (String) redisTemplate.opsForValue().get(GRAPHIC_CODE_KEY_PREFIX + ip);
-        if (StringUtils.isEmpty(realCode) || !verifyCode.equalsIgnoreCase(realCode)){
+        log.info("用户登录=====>" + "realCode: " + realCode);
+        if (StringUtils.isEmpty(realCode) || !realCode.equalsIgnoreCase(verifyCode)){
             //图文验证码无效或错误
             return RetResult.fail(RetCodeEnum.GRAPHIC_CODE_ERROR);
         }

@@ -26,6 +26,7 @@ import java.text.ParseException;
  * @since 2021-12-22
  */
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/iERecord")
 @Api(value = "收支记录模块接口", tags = "收支记录模块接口")
 public class IERecordController {

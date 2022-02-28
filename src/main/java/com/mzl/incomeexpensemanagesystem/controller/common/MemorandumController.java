@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
  * @since 2021-12-22
  */
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/memorandum")
 @Api(value = "新备忘录块接口", tags = "备忘录模块接口")
 public class MemorandumController {

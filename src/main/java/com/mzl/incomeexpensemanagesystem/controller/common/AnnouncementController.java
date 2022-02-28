@@ -7,6 +7,7 @@ import com.mzl.incomeexpensemanagesystem.service.AnnouncementService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2022-01-06
  */
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/announcement")
 @Api(value = "公告模块接口", tags = "公告模块接口")
 public class AnnouncementController {

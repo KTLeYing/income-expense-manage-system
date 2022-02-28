@@ -22,6 +22,7 @@ import java.util.Date;
  * @since 2021-12-22
  */
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/budget")
 @Api(value = "支出预算模块接口", tags = "支出预算模块接口")
 public class BudgetController {
