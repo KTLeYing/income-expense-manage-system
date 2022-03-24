@@ -270,10 +270,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         //生成用户token并存储
         String token = JwtTokenUtil.createToken(String.valueOf(user.getUserId()), user.getUsername(), true);
+        log.info("用户登录=====>" + "生成的用户token: " + token);
         //设置key的过期时间为一天
         redisTemplate.opsForValue().set(TOKEN_KEY_PREFIX + user.getUserId(), token, EXPIRATION_REMEMBER, TimeUnit.SECONDS);
         //把token返回给前端的Header
-        response.setHeader(JwtTokenUtil.TOKEN_HEADER, JwtTokenUtil.TOKEN_PREFIX + token);
+        response.addHeader(JwtTokenUtil.TOKEN_HEADER, JwtTokenUtil.TOKEN_PREFIX + token);
+        response.setHeader("Access-Control-Expose-Headers", JwtTokenUtil.TOKEN_HEADER);
         //给修改最近一次登录时间
         Date now = new Date();
         user.setLastLoginTime(now);
