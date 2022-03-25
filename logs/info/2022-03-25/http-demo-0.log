@@ -4152,3 +4152,163 @@
 2022-03-25 02:00:43.488 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:00:43
 2022-03-25 02:00:46.850 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
 2022-03-25 02:00:47.847 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@21c4b15d: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:00:50.879 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:00:53.484 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:00:53
+2022-03-25 02:00:53.489 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:00:53
+2022-03-25 02:00:54.906 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:00:55.915 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@20b574c5: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:00:58.934 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:01:02.965 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:01:03.484 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:01:03
+2022-03-25 02:01:03.487 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:01:03
+2022-03-25 02:01:03.947 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@74195fff: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:01:06.995 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:01:11.018 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:01:12.008 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@7466cfba: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:01:13.484 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:01:13
+2022-03-25 02:01:13.487 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:01:13
+2022-03-25 02:01:15.040 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:01:19.054 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:01:20.051 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@22575c24: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:01:23.069 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:01:23.484 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:01:23
+2022-03-25 02:01:23.488 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:01:23
+2022-03-25 02:01:27.105 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:01:28.080 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@79bfeb35: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:01:31.148 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:01:33.484 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:01:33
+2022-03-25 02:01:33.487 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:01:33
+2022-03-25 02:01:35.173 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:01:36.161 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@77c388db: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:01:39.199 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:01:43.235 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:01:43.484 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:01:43
+2022-03-25 02:01:43.488 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:01:43
+2022-03-25 02:01:44.212 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@7edb7cc7: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:01:47.248 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:01:51.259 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:01:52.260 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@42617bb0: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:01:53.483 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:01:53
+2022-03-25 02:01:53.487 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:01:53
+2022-03-25 02:01:55.277 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:01:59.304 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:02:00.293 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@5525d553: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:02:03.324 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:02:03.484 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:02:03
+2022-03-25 02:02:03.487 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:02:03
+2022-03-25 02:02:07.349 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:02:08.359 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@4b68e4ce: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:02:11.379 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:02:13.484 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:02:13
+2022-03-25 02:02:13.488 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:02:13
+2022-03-25 02:02:15.408 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:02:16.389 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@39262b61: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:02:19.420 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:02:23.444 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:02:23.484 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:02:23
+2022-03-25 02:02:23.487 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:02:23
+2022-03-25 02:02:24.431 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@516e6e73: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:02:27.456 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:02:31.477 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:02:32.468 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@321d3588: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:02:33.483 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:02:33
+2022-03-25 02:02:33.486 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:02:33
+2022-03-25 02:02:35.506 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:02:39.541 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:02:40.517 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@75fa6ba3: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:02:43.484 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:02:43
+2022-03-25 02:02:43.487 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:02:43
+2022-03-25 02:02:43.554 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:02:47.565 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:02:48.564 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@59b80177: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:02:51.579 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:02:53.484 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:02:53
+2022-03-25 02:02:53.487 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:02:53
+2022-03-25 02:02:55.592 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:02:56.593 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@3309b3aa: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:02:59.609 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:03:03.483 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:03:03
+2022-03-25 02:03:03.487 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:03:03
+2022-03-25 02:03:03.629 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:03:04.621 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@3542fbe6: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:03:07.652 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:03:11.684 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:03:12.662 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@7d8303c9: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:03:13.484 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:03:13
+2022-03-25 02:03:13.488 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:03:13
+2022-03-25 02:03:15.705 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:03:19.728 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:03:20.717 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@2be90614: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:03:23.484 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:03:23
+2022-03-25 02:03:23.488 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:03:23
+2022-03-25 02:03:23.768 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:03:27.783 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:03:28.778 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@4cff8624: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:03:31.815 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:03:33.484 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:03:33
+2022-03-25 02:03:33.488 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:03:33
+2022-03-25 02:03:35.831 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:03:36.831 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@7a2ce282: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:03:39.859 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:03:43.483 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:03:43
+2022-03-25 02:03:43.486 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:03:43
+2022-03-25 02:03:43.884 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:03:44.869 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@7cfb0e53: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:03:47.914 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:03:51.938 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:03:52.928 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@32b6ccd4: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:03:53.484 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:03:53
+2022-03-25 02:03:53.487 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:03:53
+2022-03-25 02:03:55.961 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:03:59.991 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:04:00.975 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@2881e3b7: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:04:03.484 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:04:03
+2022-03-25 02:04:03.487 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:04:03
+2022-03-25 02:04:04.005 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:04:08.032 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:04:09.027 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@64111010: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:04:12.062 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:04:13.484 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:04:13
+2022-03-25 02:04:13.487 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:04:13
+2022-03-25 02:04:16.084 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:04:17.076 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@6b448dd3: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:04:20.115 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:04:23.483 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:04:23
+2022-03-25 02:04:23.486 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:04:23
+2022-03-25 02:04:24.137 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:04:25.127 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@7dabf510: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:04:28.159 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:04:32.196 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:04:33.170 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@3f172e0d: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:04:33.484 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:04:33
+2022-03-25 02:04:33.487 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:04:33
+2022-03-25 02:04:36.217 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:04:40.250 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:04:41.230 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@775ccab8: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:04:43.484 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:04:43
+2022-03-25 02:04:43.488 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:04:43
+2022-03-25 02:04:44.260 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:04:48.284 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:04:49.271 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@4716ab6f: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:04:52.307 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:04:53.484 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:04:53
+2022-03-25 02:04:53.487 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:04:53
+2022-03-25 02:04:56.335 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:04:57.318 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@61dd3c0a: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:05:00.378 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:05:03.484 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:05:03
+2022-03-25 02:05:03.487 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:05:03
+2022-03-25 02:05:04.411 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:05:05.391 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@443c6dd0: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:05:08.432 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:05:12.472 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:05:13.444 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@440ad625: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:05:13.483 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:05:13
+2022-03-25 02:05:13.491 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:05:13
+2022-03-25 02:05:16.496 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:05:20.514 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:05:21.552 [INFO ] org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer - Restarting Consumer@75a00ae7: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2022-03-25 02:05:23.484 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask Start---2022-03-25 02:05:23
+2022-03-25 02:05:23.488 [INFO ] com.mzl.incomeexpensemanagesystem.schedule.NewsCollectTask - redis中的数据同步刷到数据库=====>NewsCollectTask End---2022-03-25 02:05:23
+2022-03-25 02:05:24.540 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
+2022-03-25 02:05:28.559 [INFO ] org.springframework.amqp.rabbit.connection.CachingConnectionFactory - Attempting to connect to: [localhost:5672]
