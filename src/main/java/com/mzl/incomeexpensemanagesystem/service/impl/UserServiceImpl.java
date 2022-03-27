@@ -281,7 +281,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setLastLoginTime(now);
         userMapper.updateById(user);
 
-        return RetResult.success(RetCodeEnum.LOGIN_SUCCESS);
+        return RetResult.success(RetCodeEnum.LOGIN_SUCCESS, user.getUsername());
     }
 
     /**

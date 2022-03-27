@@ -142,7 +142,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         redisTemplate.opsForValue().set(TOKEN_KEY_PREFIX + admin.getAdminId(), token, EXPIRATION_REMEMBER, TimeUnit.SECONDS);
         //把token返回给前端的Header
         response.setHeader(JwtTokenUtil.TOKEN_HEADER, JwtTokenUtil.TOKEN_PREFIX + token);
-        return RetResult.success(RetCodeEnum.LOGIN_SUCCESS);
+        return RetResult.success(RetCodeEnum.LOGIN_SUCCESS, admin.getAdminName());
     }
 
     /**
